@@ -12,8 +12,6 @@ export const splashStyles = StyleSheet.create({
   },
 
   logo: {
-    width: 250,
-    height: 250,
     alignSelf: 'center',
     marginTop: height * 0.2,
   },

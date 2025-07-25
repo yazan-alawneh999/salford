@@ -8,6 +8,12 @@ export const authStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  leaderIconInput: {
+    marginStart: 8,
+  },
+  tailIconInput: {
+    marginEnd: 8,
+  },
   keyboardView: {
     flex: 1,
   },
@@ -29,49 +35,58 @@ export const authStyles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: COLORS.text,
+    color: COLORS.primary,
+    marginTop: height * 0.04,
     textAlign: 'center',
-    marginBottom: 40,
   },
   subtitle: {
     fontSize: 16,
     color: COLORS.textLight,
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: height * 0.08,
   },
   formContainer: {
     flex: 1,
   },
+  switchContainer: {
+    flexDirection: 'row',
+
+    alignContent: 'center',
+  },
   inputContainer: {
     marginBottom: 20,
-    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    borderWidth: 0.5,
+    height: 50,
+    borderColor: COLORS.border,
   },
   textInput: {
     fontSize: 16,
     color: COLORS.text,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    backgroundColor: COLORS.background,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+
+    flex: 1,
+    paddingEnd: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   eyeButton: {
-    position: 'absolute',
-    right: 16,
-    top: 16,
-    padding: 4,
+    marginEnd: 8,
   },
   authButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 18,
-    borderRadius: 12,
+    paddingVertical: 12,
+    borderRadius: 50,
     marginTop: 20,
-    marginBottom: 30,
+    marginBottom: 18,
   },
   buttonDisabled: {
     opacity: 0.7,
   },
+
   buttonText: {
     fontSize: 16,
     fontWeight: '600',
@@ -81,6 +96,7 @@ export const authStyles = StyleSheet.create({
   linkContainer: {
     alignItems: 'center',
     paddingBottom: 20,
+    paddingTop: 30,
   },
   linkText: {
     fontSize: 16,
@@ -89,5 +105,38 @@ export const authStyles = StyleSheet.create({
   link: {
     color: COLORS.primary,
     fontWeight: '600',
+  },
+  rememberMeSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rememberMeTxt: {
+    fontSize: 12,
+    color: COLORS.textLight,
+    paddingTop: 5,
+  },
+  orSection: {
+    marginVertical: 30,
+  },
+  orText: {
+    textAlign: 'center',
+    fontWeight: '400',
+    fontSize: 20,
+  },
+  btnsSection: { marginBottom: 8 },
+  socialStyleContainer: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.white,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    gap: 4,
+    marginBottom: 12,
+  },
+  socialImg: {
+    width: 18,
+    height: 18,
   },
 });

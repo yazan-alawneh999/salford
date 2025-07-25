@@ -2,8 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from './splash';
 import { ROUTES } from '../../constants/routes';
-import GetStartedScreen from './getstarted';
-import OnboardingScreen from './onboarding';
+import GetStartedScreen from './get-started';
+import OnboardingScreen from './on-boarding';
 import StartLearningScreen from './start-learning';
 
 const IntroStack = createNativeStackNavigator();
