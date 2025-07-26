@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Replace with your actual IP + port used in Express
-const API_BASE_URL = 'http://192.168.1.203:3000';
+const API_BASE_URL = ' https://522fb09b750e.ngrok-free.app';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

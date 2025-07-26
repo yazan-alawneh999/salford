@@ -6,23 +6,57 @@ import {
   TextInput,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { homeStyles } from '../../assets/styles/home.style';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Graduation from '../../assets/images/graduate-bat.svg';
 import Fire from '../../assets/images/fire.svg';
 import { COLORS } from '../../constants/color';
 import CategoryFilter from '../../components/CategoryFilter';
+import {
+  getCategories,
+  getTrendingCourses,
+  getPopularCourses,
+} from '../../services/apiService';
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [categories, setCategories] = useState([
-    { name: 'test1' },
-    { name: 'test1' },
-    { name: 'test1' },
-    { name: 'test1' },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [trendingCourses, setTrendingCourses] = useState([]);
+  const [popularCourses, setPopularCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [catRes, trendingRes, popularRes] = await Promise.all([
+          getCategories(),
+          getTrendingCourses(),
+          getPopularCourses(),
+        ]);
+        setCategories(catRes);
+        setTrendingCourses(trendingRes);
+        setPopularCourses(popularRes);
+      } catch (err) {
+        console.error('Failed to load home data:', err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={homeStyles.centered}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
   return (
     <View style={homeStyles.container}>
       <ScrollView
