@@ -8,15 +8,23 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, { useState } from 'react';
-import MainStyle from '../../assets/styles/main.styles';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { homeStyles } from '../../assets/styles/home.style';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Graduation from '../../assets/images/graduate-bat.svg';
+import Fire from '../../assets/images/fire.svg';
 import { COLORS } from '../../constants/color';
 import CategoryFilter from '../../components/CategoryFilter';
+
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [categories, setCategories] = useState([
+    { name: 'test1' },
+    { name: 'test1' },
+    { name: 'test1' },
+    { name: 'test1' },
+  ]);
   return (
-    <View style={MainStyle.container}>
+    <View style={homeStyles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -26,50 +34,76 @@ const HomeScreen = () => {
             tintColor={COLORS.primary}
           />
         }
-        contentContainerStyle={MainStyle.scrollContent}
+        contentContainerStyle={homeStyles.scrollContent}
       >
         {/* header section  */}
-        <View style={MainStyle.headerSection}>
-          <Text style={MainStyle.helloTxt}>Hello,Ahmad</Text>
-          <TouchableOpacity style={MainStyle.notificationIconWraper}>
-            <Icon name="notification-outline" size={20} />
-          </TouchableOpacity>
-          <TouchableOpacity style={MainStyle.homePrfilePicContainer}>
-            <Image
-              source={require('../../assets/images/logo.png')}
-              style={MainStyle.homeProfileImg}
-              resizeMethod="cover"
+        <View style={homeStyles.welcomeSection}>
+          <Text style={homeStyles.welcomeText}>Hello,Ahmad</Text>
+          <TouchableOpacity style={homeStyles.notificationIconWraper}>
+            <Icon
+              name="notifications-outline"
+              size={16}
+              color={COLORS.shadow}
             />
+          </TouchableOpacity>
+          <TouchableOpacity style={homeStyles.homePrfilePicContainer}>
+            <View style={homeStyles.profileImgContainer}>
+              <Image
+                source={require('../../assets/images/logo.png')}
+                style={homeStyles.homeProfileImg}
+                resizeMethod="cover"
+              />
+            </View>
           </TouchableOpacity>
         </View>
 
         {/* titles section */}
-        <View style={MainStyle.titlesContainer}>
+        <View style={homeStyles.titlesContainer}>
           {/* regulart title section */}
-          <View style={MainStyle.regularTitleContainer}>
-            <Text style={MainStyle.regularTitleTxt}>Lets's Learn</Text>
-            <Graduation size={20} style={MainStyle.graduationVectorStyle} />
+          <View style={homeStyles.regularTitleContainer}>
+            <Text style={homeStyles.regularTitleTxt}>Let's Learn</Text>
+            <Graduation
+              width={50}
+              height={50}
+              style={homeStyles.graduationVectorStyle}
+            />
           </View>
           {/* bold title */}
-          <Text style={MainStyle.boldTitle}>Let’s learn something new</Text>
+          <Text style={homeStyles.boldTitle}>something new</Text>
         </View>
 
         {/* search section */}
-        <View style={MainStyle.searchInputContainer}>
-          <Icon name="search" size={20} />
-          <TextInput style={MainStyle.input} placeholder="Search Course" />
-          <Icon name="filter" size={20} color={COLORS.primary} />
+        <View style={homeStyles.searchInputContainer}>
+          <Icon name="search-outline" size={20} color={COLORS.hint} />
+
+          <TextInput
+            style={homeStyles.input}
+            placeholder="Search Course"
+            placeholderTextColor={COLORS.hint}
+          />
+          <TouchableOpacity>
+            <Icon name="filter-outline" size={20} color={COLORS.primary} />
+          </TouchableOpacity>
+        </View>
+        {/* categories section */}
+        <View style={homeStyles.section}>
+          {categories.length > 0 && (
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={'selectedCategory'}
+              onSelectCategory={() => {}}
+            />
+          )}
+        </View>
+        {/* courses section */}
+        <View style={homeStyles.section}>
+          <View style={homeStyles.courseHeaderContainer}>
+            <Text style={homeStyles.courseHeaderLabel}>Trending Courses</Text>
+            <Fire width={25} height={25} />
+            <Text style={homeStyles.seeAllText}>See All</Text>
+          </View>
         </View>
       </ScrollView>
-
-      {/* categories  */}
-      {/* {categories.length > 0 && ( */}
-      <CategoryFilter
-        categories={[]}
-        selectedCategory={'selectedCategory'}
-        onSelectCategory={() => {}}
-      />
-      {/* )} */}
     </View>
   );
 };

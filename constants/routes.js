@@ -9,4 +9,5 @@ export const ROUTES = {
   SIGNUP: 'signupScreen',
   SIGNIN: 'signinScreen',
   AUTH: 'AuthRoot',
+  Main: 'MainRoot',
 };

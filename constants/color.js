@@ -1,5 +1,6 @@
 const slafordTheme = {
   primary: '#087E8B',
+  primaryDark: '#0B3954',
   background: '#F8F1F1',
   text: '#1C1C1C',
   border: '#087E8B',
@@ -7,6 +8,7 @@ const slafordTheme = {
   textLight: '#6E6E6E',
   card: '#FFFFFF',
   shadow: '#000000',
+  hint: '#74768860',
 };
 
 // 👇 change this to switch theme

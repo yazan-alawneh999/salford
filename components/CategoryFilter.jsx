@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
-import { MainStyle } from '../../assets/styles/main.styles';
+import { homeStyles } from '../assets/styles/home.style';
 
 export default function CategoryFilter({
   categories,
@@ -8,11 +8,11 @@ export default function CategoryFilter({
   onSelectCategory,
 }) {
   return (
-    <View style={MainStyle.categoryFilterContainer}>
+    <View style={homeStyles.categoryFilterContainer}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={MainStyle.categoryFilterScrollContent}
+        contentContainerStyle={homeStyles.categoryFilterScrollContent}
       >
         {categories.map(category => {
           const isSelected = selectedCategory === category.name;
@@ -20,16 +20,16 @@ export default function CategoryFilter({
             <TouchableOpacity
               key={category.id}
               style={[
-                MainStyle.categoryButton,
-                isSelected && MainStyle.selectedCategory,
+                homeStyles.categoryButton,
+                isSelected && homeStyles.selectedCategory,
               ]}
               onPress={() => onSelectCategory(category.name)}
               activeOpacity={0.7}
             >
               <Text
                 style={[
-                  MainStyle.categoryText,
-                  isSelected && MainStyle.selectedCategoryText,
+                  homeStyles.categoryText,
+                  isSelected && homeStyles.selectedCategoryText,
                 ]}
               >
                 {category.name}
