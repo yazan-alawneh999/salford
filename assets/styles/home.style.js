@@ -2,15 +2,43 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { COLORS } from '../../constants/color';
 
 const { width } = Dimensions.get('window');
-const cardWidth = (width - 48) / 2;
+const cardWidth = width / 2;
 
 export const homeStyles = StyleSheet.create({
+  courseTextContainer: {
+    paddingTop: 8,
+    width: cardWidth,
+    paddingHorizontal: 8,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.shadow,
+    paddingHorizontal: 8,
+  },
+  lecturerName: {
+    fontSize: 12,
+
+    paddingHorizontal: 8,
+  },
+  lecturerNameSpan: {
+    fontSize: 12,
+    color: COLORS.primary,
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   scrollContent: {
     paddingBottom: 32,
+  },
+  horizontalList: {
+    paddingHorizontal: 20,
   },
   centered: {
     flex: 1,
@@ -93,6 +121,7 @@ export const homeStyles = StyleSheet.create({
   courseHeaderContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
+    paddingBottom: 15,
   },
   courseHeaderLabel: {
     fontWeight: '600',
@@ -107,10 +136,10 @@ export const homeStyles = StyleSheet.create({
     color: COLORS.primary,
     fontWeight: '400',
   },
-  featuredCard: {
+  courseCard: {
     borderRadius: 24,
     overflow: 'hidden',
-    backgroundColor: COLORS.card,
+
     shadowColor: COLORS.shadow,
     shadowOffset: {
       width: 0,
@@ -120,35 +149,44 @@ export const homeStyles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 12,
   },
-  featuredImageContainer: {
-    height: 240,
+  courseImageContainer: {
+    width: cardWidth,
+    height: 201,
     backgroundColor: COLORS.primary,
     position: 'relative',
+    borderRadius: 30,
   },
-  featuredImage: {
+  image: {
     width: '100%',
     height: '100%',
+    borderRadius: 30,
   },
-  featuredOverlay: {
+  courseOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 10,
+    borderRadius: 30,
   },
-  featuredBadge: {
-    backgroundColor: COLORS.primary,
+  textPrice: {
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     alignSelf: 'flex-start',
-  },
-  featuredBadgeText: {
-    color: COLORS.white,
+    color: COLORS.shadow,
     fontSize: 12,
     fontWeight: '600',
   },
-  featuredContent: {
+
+  saveRow: {
+    alignSelf: 'flex-end',
     justifyContent: 'flex-end',
+  },
+  saveIconContainer: {
+    borderRadius: 100,
+    backgroundColor: COLORS.white,
+    padding: 6,
   },
   featuredTitle: {
     fontSize: 24,
@@ -186,15 +224,16 @@ export const homeStyles = StyleSheet.create({
     color: COLORS.text,
     letterSpacing: -0.5,
   },
-  recipesGrid: {
+  courseRow: {
+    paddingStart: 16,
+    paddingEnd: 16,
     gap: 16,
   },
-  row: {
-    justifyContent: 'space-between',
-    gap: 16,
-  },
+
   emptyState: {
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
     paddingVertical: 64,
     paddingHorizontal: 32,
   },

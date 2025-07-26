@@ -23,7 +23,7 @@ export default function CategoryFilter({
                 homeStyles.categoryButton,
                 isSelected && homeStyles.selectedCategory,
               ]}
-              onPress={() => onSelectCategory(category.name)}
+              onPress={() => onSelectCategory(category)}
               activeOpacity={0.7}
             >
               <Text

@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Replace with your actual IP + port used in Express
-const API_BASE_URL = ' https://522fb09b750e.ngrok-free.app';
-
+const API_BASE_URL = 'https://70e9ff0b4cf7.ngrok-free.app';
+export const IMAGE_BASE_URL = `${API_BASE_URL}/images`;
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000, // 10 seconds
@@ -62,5 +61,10 @@ export const getPlans = async () => {
 // Categories
 export const getCategories = async () => {
   const res = await api.get('/categories');
+  return res.data;
+};
+
+export const getCoursesByCategoryId = async categoryId => {
+  const res = await api.get(`/courses/${categoryId}`);
   return res.data;
 };

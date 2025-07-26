@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { homeStyles } from '../../assets/styles/home.style';
@@ -19,35 +20,73 @@ import {
   getCategories,
   getTrendingCourses,
   getPopularCourses,
+  getCoursesByCategoryId,
 } from '../../services/apiService';
+import CourseItem from '../../components/CourseItem';
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [popularCourses, setPopularCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [catRes, trendingRes, popularRes] = await Promise.all([
-          getCategories(),
-          getTrendingCourses(),
-          getPopularCourses(),
-        ]);
-        setCategories(catRes);
-        setTrendingCourses(trendingRes);
-        setPopularCourses(popularRes);
-      } catch (err) {
-        console.error('Failed to load home data:', err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const [catRes, trendingRes, popularRes] = await Promise.all([
+        getCategories(),
+        getTrendingCourses(),
+        getPopularCourses(),
+      ]);
+      if (!selectedCategory) setSelectedCategory(catRes[0].name);
+      setCategories(catRes);
+      setTrendingCourses(trendingRes);
+      setPopularCourses(popularRes);
+    } catch (err) {
+      console.error('Failed to load home data:', err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const loadCategoryCourses = async category => {
+    try {
+      const courses = await getCoursesByCategoryId(category.id);
+
+      const transformedCourses = courses.filter(course => course !== null);
+
+      const trendingCourses = transformedCourses.filter(
+        course => course.popularity_type === 'trending',
+      );
+
+      const popularCourses = transformedCourses.filter(
+        course => course.popularity_type === 'popular',
+      );
+
+      setTrendingCourses(trendingCourses);
+      setPopularCourses(popularCourses);
+    } catch (error) {
+      console.error('Error loading category courses:', error);
+      setTrendingCourses([]);
+      setPopularCourses([]);
+    }
+  };
+
+  const handleCategorySelect = async category => {
+    setSelectedCategory(category.name);
+    await loadCategoryCourses(category.id);
+  };
 
   if (loading) {
     return (
@@ -63,9 +102,9 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {}}
             tintColor={COLORS.primary}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
         }
         contentContainerStyle={homeStyles.scrollContent}
@@ -124,18 +163,74 @@ const HomeScreen = () => {
           {categories.length > 0 && (
             <CategoryFilter
               categories={categories}
-              selectedCategory={'selectedCategory'}
-              onSelectCategory={() => {}}
+              selectedCategory={selectedCategory}
+              onSelectCategory={handleCategorySelect}
             />
           )}
         </View>
-        {/* courses section */}
+        {/*trending  courses section */}
         <View style={homeStyles.section}>
+          {/*  courses header  */}
           <View style={homeStyles.courseHeaderContainer}>
             <Text style={homeStyles.courseHeaderLabel}>Trending Courses</Text>
             <Fire width={25} height={25} />
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
+
+          {trendingCourses.length > 0 && (
+            <FlatList
+              data={trendingCourses}
+              renderItem={({ item }) => <CourseItem course={item} />}
+              keyExtractor={item => item.id.toString()}
+              horizontal
+              contentContainerStyle={[
+                homeStyles.courseRow,
+                trendingCourses.length === 0 && homeStyles.center,
+              ]}
+              showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={
+                <View style={homeStyles.emptyState}>
+                  <Icon name="book-outline" size={64} color={COLORS.primary} />
+                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
+                  <Text style={homeStyles.emptyDescription}>
+                    Try a different category
+                  </Text>
+                </View>
+              }
+            />
+          )}
+        </View>
+        {/*Popular  courses section */}
+        <View style={homeStyles.section}>
+          {/*  courses header  */}
+          <View style={homeStyles.courseHeaderContainer}>
+            <Text style={homeStyles.courseHeaderLabel}>Popular Courses</Text>
+            {/* <Fire width={25} height={25} /> */}
+            <Text style={homeStyles.seeAllText}>See All</Text>
+          </View>
+
+          {trendingCourses.length > 0 && (
+            <FlatList
+              data={popularCourses}
+              renderItem={({ item }) => <CourseItem course={item} />}
+              keyExtractor={item => item.id.toString()}
+              horizontal
+              contentContainerStyle={[
+                homeStyles.courseRow,
+                popularCourses.length === 0 && homeStyles.center,
+              ]}
+              showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={
+                <View style={homeStyles.emptyState}>
+                  <Icon name="book-outline" size={64} color={COLORS.primary} />
+                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
+                  <Text style={homeStyles.emptyDescription}>
+                    Try a different category
+                  </Text>
+                </View>
+              }
+            />
+          )}
         </View>
       </ScrollView>
     </View>
