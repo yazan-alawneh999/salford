@@ -1,29 +1,27 @@
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import RootStack from './app/_layout';
-import SafeScreen from './components/SafeScreen';
-import { StatusBar } from 'react-native';
-import { COLORS } from './constants/color';
-import { NavigationContainer } from '@react-navigation/native';
-import FlashMessage from 'react-native-flash-message';
-import { AuthProvider } from './hooks/useAuth';
+import React, { useEffect } from 'react';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store from './redux/store';
+import { checkAuth } from './redux/slices/authSlice';
+import Entry from './Entry';
 
+const AppWrapper = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 function App() {
+  const dispatch = useDispatch();
+  const { loading, isAuthenticated } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, []);
+
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <AuthProvider>
-          <SafeScreen>
-            <StatusBar
-              barStyle="dark-content"
-              backgroundColor={COLORS.background}
-            />
-            <RootStack />
-          </SafeScreen>
-          <FlashMessage position="top" />
-        </AuthProvider>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <Entry isAuthenticated={isAuthenticated} loading={loading} />
+    </Provider>
   );
 }
 
-export default App;
+export default AppWrapper;
