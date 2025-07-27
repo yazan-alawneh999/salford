@@ -14,7 +14,10 @@ export const tokenService = {
 
   getToken: async () => {
     try {
-      return await AsyncStorage.getItem(TOKEN_KEY);
+      const token = await AsyncStorage.getItem(TOKEN_KEY);
+      console.log('TOKEN TYPE:', typeof token); // should be 'string'
+      console.log('TOKEN VALUE:', token);
+      return token;
     } catch (error) {
       console.error('Failed to get token:', error);
       return null;

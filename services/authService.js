@@ -9,6 +9,7 @@ export const signUp = async ({ email, password }) => {
 
 export const signIn = async ({ email, password }) => {
   const res = await api.post('/api/auth/signin', { email, password });
+  console.log(`token ${res.data.token}`);
   await tokenService.setToken(res.data.token);
   return res.data;
 };
