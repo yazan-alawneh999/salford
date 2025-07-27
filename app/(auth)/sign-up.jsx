@@ -14,6 +14,10 @@ import { COLORS } from '../../constants/color';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { signUp } from '../../services/authService';
+import { showMessage } from 'react-native-flash-message';
+import { ROUTES } from '../../constants/routes';
+
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,6 +26,32 @@ const SignUpScreen = ({ navigation }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const handleSignUp = async () => {
+    if (!email || !password || !confirmPass) {
+      return showMessage({
+        message: 'All fields are required',
+        type: 'danger',
+      });
+    }
+
+    if (password !== confirmPass) {
+      return showMessage({ message: 'Passwords do not match', type: 'danger' });
+    }
+
+    setLoading(true);
+    try {
+      await signUp({ email, password });
+      showMessage({ message: 'Registration successful', type: 'success' });
+      navigation.replace(ROUTES.Main);
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Signup failed';
+      showMessage({ message: msg, type: 'danger' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={authStyles.container}>
       <KeyboardAvoidingView
@@ -107,7 +137,7 @@ const SignUpScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               // style={[
               //   authStyles.authButton,
               //   loading && authStyles.buttonDisabled,
@@ -127,6 +157,25 @@ const SignUpScreen = ({ navigation }) => {
               >
                 <Text style={authStyles.buttonText}>
                   {loading ? 'Login...' : 'Login'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={handleSignUp}
+              disabled={loading}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#087E8B', '#0B3954']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[
+                  authStyles.authButton,
+                  loading && authStyles.buttonDisabled,
+                ]}
+              >
+                <Text style={authStyles.buttonText}>
+                  {loading ? 'Signing up...' : 'Sign up'}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>

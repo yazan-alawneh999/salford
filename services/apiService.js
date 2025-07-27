@@ -1,4 +1,41 @@
 import api from './api';
+import { tokenService } from './tokenService';
+// AUTH
+export const signUp = async (email, password) => {
+  try {
+    const res = await api.post('/api/auth/signup', { email, password });
+
+    // Save token
+    if (res.data?.token) {
+      await tokenService.setToken(res.data.token);
+    }
+
+    return res.data;
+  } catch (error) {
+    console.error('Sign Up Error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const signIn = async (email, password) => {
+  try {
+    const res = await api.post('/api/auth/signin', { email, password });
+
+    // Save token
+    if (res.data?.token) {
+      await tokenService.setToken(res.data.token);
+    }
+
+    return res.data;
+  } catch (error) {
+    console.error('Sign In Error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const signOut = async () => {
+  await tokenService.clearToken();
+};
 // Courses
 export const getCourses = async () => {
   const res = await api.get('/courses');

@@ -16,6 +16,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Google from '../../assets/images/Google.svg';
 import Apple from '../../assets/images/Vector.svg';
 import { ROUTES } from '../../constants/routes';
+import { signIn } from '../../services/authService';
+import { showMessage } from 'react-native-flash-message'; // Install if needed
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -23,6 +25,33 @@ const SignInScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+
+  // Inside component
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      return showMessage({
+        message: 'Email and password are required',
+        type: 'danger',
+      });
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      await signIn({ email, password });
+      showMessage({ message: 'Login successful', type: 'success' });
+      // Navigate to home/dashboard
+      navigation.replace(ROUTES.Main);
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Login failed';
+      setError(msg);
+      showMessage({ message: msg, type: 'danger' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={authStyles.container}>
@@ -82,7 +111,7 @@ const SignInScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               // style={[
               //   authStyles.authButton,
               //   loading && authStyles.buttonDisabled,
@@ -102,6 +131,26 @@ const SignInScreen = ({ navigation }) => {
               >
                 <Text style={authStyles.buttonText}>
                   {loading ? 'Login...' : 'Login'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity> */}
+
+            <TouchableOpacity
+              onPress={handleLogin}
+              disabled={loading}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#087E8B', '#0B3954']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[
+                  authStyles.authButton,
+                  loading && authStyles.buttonDisabled,
+                ]}
+              >
+                <Text style={authStyles.buttonText}>
+                  {loading ? 'Logging in...' : 'Login'}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>

@@ -164,6 +164,7 @@ const HomeScreen = () => {
         </View>
         {/* categories section */}
         <View style={homeStyles.section}>
+        
           {categories.length > 0 && (
             <CategoryFilter
               categories={categories}

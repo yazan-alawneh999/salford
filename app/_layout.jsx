@@ -6,13 +6,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ROUTES } from '../constants/routes';
 import AuthRoot from './(auth)/_layout';
 import MainRoot from './(main)/_layout';
-
+import FlashMessage from 'react-native-flash-message';
 const Stack = createNativeStackNavigator();
 
 export default function RootStack() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={ROUTES.Main}>
+      <Stack.Navigator>
         <Stack.Screen
           name={ROUTES.INTRO}
           component={IntroRoot}
@@ -29,6 +29,7 @@ export default function RootStack() {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 }
