@@ -1,21 +1,4 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'https://70e9ff0b4cf7.ngrok-free.app';
-export const IMAGE_BASE_URL = `${API_BASE_URL}/images`;
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000, // 10 seconds
-});
-
-// Optional: Global error interceptor
-api.interceptors.response.use(
-  response => response,
-  error => {
-    console.error('API error:', error?.response?.data || error.message);
-    return Promise.reject(error);
-  },
-);
-
+import api from './api';
 // Courses
 export const getCourses = async () => {
   const res = await api.get('/courses');
@@ -65,6 +48,6 @@ export const getCategories = async () => {
 };
 
 export const getCoursesByCategoryId = async categoryId => {
-  const res = await api.get(`/courses/${categoryId}`);
+  const res = await api.get(`courses/category/${categoryId}`);
   return res.data;
 };

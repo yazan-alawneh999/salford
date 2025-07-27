@@ -31,6 +31,7 @@ const HomeScreen = () => {
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [popularCourses, setPopularCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [courseLoading, setCourseLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -39,7 +40,10 @@ const HomeScreen = () => {
         getTrendingCourses(),
         getPopularCourses(),
       ]);
-      if (!selectedCategory) setSelectedCategory(catRes[0].name);
+      if (!selectedCategory) {
+        setSelectedCategory(catRes[0].name);
+      }
+
       setCategories(catRes);
       setTrendingCourses(trendingRes);
       setPopularCourses(popularRes);
@@ -64,13 +68,11 @@ const HomeScreen = () => {
     try {
       const courses = await getCoursesByCategoryId(category.id);
 
-      const transformedCourses = courses.filter(course => course !== null);
-
-      const trendingCourses = transformedCourses.filter(
+      const trendingCourses = courses.filter(
         course => course.popularity_type === 'trending',
       );
 
-      const popularCourses = transformedCourses.filter(
+      const popularCourses = courses.filter(
         course => course.popularity_type === 'popular',
       );
 
@@ -85,7 +87,9 @@ const HomeScreen = () => {
 
   const handleCategorySelect = async category => {
     setSelectedCategory(category.name);
-    await loadCategoryCourses(category.id);
+    setCourseLoading(true);
+    await loadCategoryCourses(category);
+    setCourseLoading(false);
   };
 
   if (loading) {
@@ -177,7 +181,7 @@ const HomeScreen = () => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {trendingCourses.length > 0 && (
+          {trendingCourses.length > 0 ? (
             <FlatList
               data={trendingCourses}
               renderItem={({ item }) => <CourseItem course={item} />}
@@ -198,6 +202,14 @@ const HomeScreen = () => {
                 </View>
               }
             />
+          ) : (
+            <View style={homeStyles.emptyState}>
+              <Icon name="book-outline" size={64} color={COLORS.primary} />
+              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
+              <Text style={homeStyles.emptyDescription}>
+                Try a different category
+              </Text>
+            </View>
           )}
         </View>
         {/*Popular  courses section */}
@@ -209,7 +221,7 @@ const HomeScreen = () => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {trendingCourses.length > 0 && (
+          {popularCourses.length > 0 ? (
             <FlatList
               data={popularCourses}
               renderItem={({ item }) => <CourseItem course={item} />}
@@ -230,6 +242,14 @@ const HomeScreen = () => {
                 </View>
               }
             />
+          ) : (
+            <View style={homeStyles.emptyState}>
+              <Icon name="book-outline" size={64} color={COLORS.primary} />
+              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
+              <Text style={homeStyles.emptyDescription}>
+                Try a different category
+              </Text>
+            </View>
           )}
         </View>
       </ScrollView>

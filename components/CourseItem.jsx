@@ -5,7 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import { ROUTES } from '../constants/routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants/color';
-import { IMAGE_BASE_URL } from '../services/apiService';
+import { IMAGE_BASE_URL } from '../services/api';
 
 const CourseItem = ({ course }) => {
   const router = useRoute();
