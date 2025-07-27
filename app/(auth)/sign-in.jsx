@@ -43,7 +43,7 @@ const SignInScreen = ({ navigation }) => {
       await signIn({ email, password });
       showMessage({ message: 'Login successful', type: 'success' });
       // Navigate to home/dashboard
-      navigation.replace(ROUTES.Main);
+      navigation.getParent()?.replace(ROUTES.Main);
     } catch (err) {
       const msg = err.response?.data?.error || 'Login failed';
       setError(msg);

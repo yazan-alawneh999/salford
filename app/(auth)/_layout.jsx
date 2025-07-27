@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ROUTES } from '../../constants/routes';
 import SignUpScreen from './sign-up';
 import SignInScreen from './sign-in';
+import MainRoot from '../(main)/_layout';
 
 const AuthStack = createNativeStackNavigator();
 

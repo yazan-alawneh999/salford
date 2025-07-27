@@ -6,7 +6,7 @@ import { ROUTES } from '../../constants/routes';
 
 const StartLearningScreen = ({ navigation }) => {
   const onPress = () => {
-    navigation.replace(ROUTES.AUTH);
+    navigation.getParent()?.replace(ROUTES.AUTH);
   };
   return (
     <View style={getstartedStyles.container}>
