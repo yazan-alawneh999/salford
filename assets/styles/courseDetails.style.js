@@ -7,7 +7,9 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     paddingHorizontal: 20,
   },
-  listContent: {},
+  listContent: {
+    paddingBottom: 84,
+  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',

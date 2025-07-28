@@ -1,6 +1,6 @@
-// FloatingMenu.js
 import React, { useState, useRef } from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { BlurView } from '@react-native-community/blur';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionButton from 'react-native-circular-action-menu';
 import { COLORS } from '../constants/color';
@@ -9,12 +9,12 @@ const { width, height } = Dimensions.get('window');
 
 export default function FloatingMenu() {
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const actionButtonRef = useRef(null);
-  const [menuPosition, setMenuPosition] = useState({
-    x: width / 2,
-    y: height - 80,
-    radius: 120,
-  });
+  const radius = 120;
+
+  const centerX = width / 2;
+  const centerY = height - 100;
 
   const handleMenuToggle = isOpen => {
     setOpen(isOpen);
@@ -22,92 +22,116 @@ export default function FloatingMenu() {
 
   return (
     <>
-      {/* Blur Background - Only visible when menu is open */}
-      {/* {open && (
-        <TouchableWithoutFeedback onPress={() => handleMenuToggle(false)}>
-          <View style={styles.blurContainer}>
+      {/* Circular blur background */}
+      {open && (
+        <View style={styles.blurContainer}>
+          <View
+            style={[
+              styles.blurWrapper,
+              {
+                width: radius * 2,
+                height: radius * 2,
+                borderRadius: radius,
+                left: centerX - radius,
+                top: centerY + radius - 175,
+              },
+            ]}
+          >
             <BlurView
-              style={[
-                styles.blurBackground,
-                {
-                  width: menuPosition.radius * 2,
-                  height: menuPosition.radius * 2,
-                  borderRadius: menuPosition.radius,
-                  left: menuPosition.x - menuPosition.radius,
-                  top: menuPosition.y - menuPosition.radius,
-                },
-              ]}
+              style={StyleSheet.absoluteFill}
               blurType="light"
-              blurAmount={15}
+              blurAmount={40}
               reducedTransparencyFallbackColor="white"
             />
           </View>
-        </TouchableWithoutFeedback>
-      )} */}
+        </View>
+      )}
 
-      {/* Floating Action Button */}
-      <View style={styles.menuContainer}>
+      {/* FAB centered at bottom of blur */}
+      <View
+        style={[
+          styles.menuContainer,
+          {
+            width: 56,
+            height: 56,
+            left: centerX - 28,
+            top: centerY + radius - 74,
+          },
+        ]}
+      >
         <ActionButton
           ref={actionButtonRef}
           position="center"
-          buttonColor={COLORS.primary}
-          offsetY={30}
+          buttonColor={menuOpen ? COLORS.white : COLORS.primary}
+          offsetY={0}
           spacing={10}
           outRangeScale={1}
-          degrees={160}
           onPress={() => handleMenuToggle(!open)}
           onOpen={() => handleMenuToggle(true)}
           onClose={() => handleMenuToggle(false)}
           backdrop={<></>}
+          active={menuOpen}
         >
           <ActionButton.Item
             buttonColor={COLORS.white}
             title="Grid"
-            onPress={() => console.log('Grid tapped')}
+            onPress={() => {
+              console.log('Grid tapped');
+              handleMenuToggle(false);
+            }}
           >
-            <Icon
-              name="grid-outline"
-              style={[styles.icon, open ? styles.iconActive : styles.iconDark]}
-            />
+            <Icon name="grid-outline" style={[styles.icon, styles.iconDark]} />
           </ActionButton.Item>
 
           <ActionButton.Item
             buttonColor={COLORS.white}
             title="Bookmark"
-            onPress={() => console.log('Bookmark tapped')}
+            onPress={() => {
+              console.log('Bookmark tapped');
+              handleMenuToggle(false);
+            }}
           >
             <Icon
               name="bookmark-outline"
-              style={[styles.icon, open ? styles.iconActive : styles.iconDark]}
+              style={[styles.icon, styles.iconDark]}
             />
           </ActionButton.Item>
 
           <ActionButton.Item
             buttonColor={COLORS.white}
             title="User"
-            onPress={() => console.log('User tapped')}
+            onPress={() => {
+              console.log('User tapped');
+              handleMenuToggle(false);
+            }}
           >
             <Icon
               name="person-outline"
-              style={[styles.icon, open ? styles.iconActive : styles.iconDark]}
+              style={[styles.icon, styles.iconDark]}
             />
           </ActionButton.Item>
 
           <ActionButton.Item
             buttonColor={COLORS.white}
             title="Settings"
-            onPress={() => console.log('Settings tapped')}
+            onPress={() => {
+              console.log('Settings tapped');
+              handleMenuToggle(false);
+            }}
           >
             <Icon
               name="settings-outline"
-              style={[styles.icon, open ? styles.iconActive : styles.iconDark]}
+              style={[styles.icon, styles.iconDark]}
             />
           </ActionButton.Item>
 
           <ActionButton.Item
             buttonColor={COLORS.primary}
             title="Home"
-            onPress={() => console.log('Home tapped')}
+            onPress={() => {
+              console.log('Home tapped');
+              handleMenuToggle(false);
+            }}
           >
             <Icon name="home-outline" style={[styles.icon, styles.iconLight]} />
           </ActionButton.Item>
@@ -124,24 +148,29 @@ const styles = StyleSheet.create({
   iconDark: {
     color: COLORS.primary,
   },
-  iconActive: {
-    color: COLORS.primary,
-  },
   iconLight: {
     color: COLORS.white,
+  },
+  closeIconWrapper: {
+    backgroundColor: COLORS.white,
+    borderRadius: 30,
+    padding: 6,
   },
   blurContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  blurBackground: {
+  blurWrapper: {
     position: 'absolute',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Platform.OS === 'android' ? '#ffffffcc' : 'transparent',
   },
   menuContainer: {
     position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
