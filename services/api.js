@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { tokenService } from './tokenService';
 
-const API_BASE_URL = 'https://6dc40f7e4a2b.ngrok-free.app';
+const API_BASE_URL = 'https://c1f34f0138b8.ngrok-free.app';
 export const IMAGE_BASE_URL = `${API_BASE_URL}/images`;
 
 const api = axios.create({
@@ -29,6 +29,15 @@ api.interceptors.response.use(
     console.error('API error:', error?.response?.data || error.message);
 
     return Promise.reject(error);
+  },
+);
+api.interceptors.request.use(
+  request => {
+    console.log(request);
+    return request; // 👈 must return it
+  },
+  error => {
+    return Promise.reject(error); // 👈 handle errors too
   },
 );
 

@@ -23,6 +23,8 @@ import {
   getCoursesByCategoryId,
 } from '../../services/apiService';
 import CourseItem from '../../components/CourseItem';
+import { useSelector } from 'react-redux';
+import { IMAGE_BASE_URL } from '../../services/api';
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -31,7 +33,7 @@ const HomeScreen = () => {
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [popularCourses, setPopularCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [courseLoading, setCourseLoading] = useState(false);
+  const { profile } = useSelector(state => state.profile);
 
   const fetchData = async () => {
     try {
@@ -115,7 +117,9 @@ const HomeScreen = () => {
       >
         {/* header section  */}
         <View style={homeStyles.welcomeSection}>
-          <Text style={homeStyles.welcomeText}>Hello,Ahmad</Text>
+          <Text style={homeStyles.welcomeText}>
+            Hello, {profile ? profile.display_name : 'Guest'}
+          </Text>
           <TouchableOpacity style={homeStyles.notificationIconWraper}>
             <Icon
               name="notifications-outline"
@@ -126,9 +130,10 @@ const HomeScreen = () => {
           <TouchableOpacity style={homeStyles.homePrfilePicContainer}>
             <View style={homeStyles.profileImgContainer}>
               <Image
-                source={require('../../assets/images/logo.png')}
+                source={{ uri: `${IMAGE_BASE_URL}/${profile.image_url}` }}
                 style={homeStyles.homeProfileImg}
                 resizeMethod="cover"
+                transition={300}
               />
             </View>
           </TouchableOpacity>
@@ -164,7 +169,6 @@ const HomeScreen = () => {
         </View>
         {/* categories section */}
         <View style={homeStyles.section}>
-        
           {categories.length > 0 && (
             <CategoryFilter
               categories={categories}

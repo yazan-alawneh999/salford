@@ -9,6 +9,9 @@ export const signUp = async (email, password) => {
     if (res.data?.token) {
       await tokenService.setToken(res.data.token);
     }
+    if (res.data?.userId) {
+      await tokenService.setUserId(res.data.userId);
+    }
 
     return res.data;
   } catch (error) {
@@ -21,9 +24,15 @@ export const signIn = async (email, password) => {
   try {
     const res = await api.post('/api/auth/signin', { email, password });
 
-    // Save token
+    console.log('SIGNIN RESPONSE:', res.data);
+
     if (res.data?.token) {
       await tokenService.setToken(res.data.token);
+    }
+
+    if (res.data?.userId) {
+      await tokenService.setUserId(res.data.userId);
+      console.log(`id = ${res.data.userId}`);
     }
 
     return res.data;
@@ -87,4 +96,19 @@ export const getCategories = async () => {
 export const getCoursesByCategoryId = async categoryId => {
   const res = await api.get(`courses/category/${categoryId}`);
   return res.data;
+};
+
+export const getProfile = async () => {
+  try {
+    const userId = await tokenService.getUserId();
+    if (!userId) {
+      throw new Error('User not authenticated');
+    }
+    const res = await api.get(`/api/profiles/${userId}`);
+    console.log('Profile data:', res.data);
+    return res.data;
+  } catch (error) {
+    console.error('Get Profile Error:', error.response?.data || error.message);
+    throw error;
+  }
 };

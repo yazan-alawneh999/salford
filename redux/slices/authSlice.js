@@ -3,7 +3,9 @@ import { tokenService } from '../../services/tokenService';
 
 export const checkAuth = createAsyncThunk('auth/checkAuth', async () => {
   const token = await tokenService.getToken();
-  return token;
+  const userId = await tokenService.getUserId();
+  console.log(`userId : ${userId}`);
+  return { token, userId };
 });
 
 export const authSlice = createSlice({
@@ -11,6 +13,7 @@ export const authSlice = createSlice({
   initialState: {
     isAuthenticated: false,
     token: null,
+    userId: null,
     loading: true,
   },
   reducers: {
@@ -18,11 +21,15 @@ export const authSlice = createSlice({
       tokenService.clearToken();
       state.isAuthenticated = false;
       state.token = null;
+      state.userId = null;
     },
     loginSuccess: (state, action) => {
-      state.token = action.payload;
+      const { token, userId } = action.payload;
+      state.token = token;
+      state.userId = userId;
       state.isAuthenticated = true;
-      tokenService.setToken(action.payload);
+      tokenService.setToken(token);
+      tokenService.setUserId(userId);
     },
   },
   extraReducers: builder => {
@@ -31,14 +38,17 @@ export const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
+        const { token, userId } = action.payload || {};
         state.loading = false;
-        state.token = action.payload;
-        state.isAuthenticated = !!action.payload;
+        state.token = token || null;
+        state.userId = userId || null;
+        state.isAuthenticated = !!token;
       })
       .addCase(checkAuth.rejected, state => {
         state.loading = false;
         state.isAuthenticated = false;
         state.token = null;
+        state.userId = null;
       });
   },
 });

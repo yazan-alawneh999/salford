@@ -2,6 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TOKEN_KEY = 'jwt_token';
+const USERID_KEY = 'user_id';
 
 export const tokenService = {
   setToken: async token => {
@@ -20,6 +21,24 @@ export const tokenService = {
       return token;
     } catch (error) {
       console.error('Failed to get token:', error);
+      return null;
+    }
+  },
+  setUserId: async userId => {
+    try {
+      await AsyncStorage.setItem(USERID_KEY, String(userId));
+    } catch (error) {
+      console.error('Faild to save userId ', error);
+    }
+  },
+  getUserId: async () => {
+    try {
+      const userId = await AsyncStorage.getItem(USERID_KEY);
+      const parsedId = userId ? parseInt(userId, 10) : null;
+      console.log('TOKEN userId:', parsedId);
+      return parsedId;
+    } catch (error) {
+      console.error('Failed to get userId:', error);
       return null;
     }
   },

@@ -3,6 +3,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './redux/store';
 import { checkAuth } from './redux/slices/authSlice';
 import Entry from './Entry';
+import { fetchProfile } from './redux/slices/profileSlice ';
 
 const AppWrapper = () => (
   <Provider store={store}>
@@ -14,8 +15,16 @@ function App() {
   const { loading, isAuthenticated } = useSelector(state => state.auth);
 
   useEffect(() => {
-    dispatch(checkAuth());
-  }, []);
+    const initialize = async () => {
+      const result = await dispatch(checkAuth());
+
+      // if (result.payload?.userId) {
+      dispatch(fetchProfile());
+      // console.log(result.payload.userId);
+      // }
+    };
+    initialize();
+  }, [dispatch]);
 
   return (
     <Provider store={store}>
