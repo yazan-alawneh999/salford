@@ -101,6 +101,9 @@ const HomeScreen = ({ navigation }) => {
     setCourseLoading(false);
   };
 
+  const handleCoursePressed = course => {
+    navigation.navigate(ROUTES.DETAILS, { courseId: course.id });
+  };
   if (loading) {
     return (
       <View style={homeStyles.centered}>
@@ -115,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            tintColor={COLORS.primary}
+            colors={[COLORS.primary]}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
@@ -177,7 +180,7 @@ const HomeScreen = ({ navigation }) => {
             pointerEvents="none" // prevent touch
           />
           <TouchableOpacity>
-            <Icon name="filter-outline" size={20} color={COLORS.primary} />
+            <Icon name="options-outline" size={20} color={COLORS.primary} />
           </TouchableOpacity>
         </TouchableOpacity>
         {/* categories section */}
@@ -202,7 +205,9 @@ const HomeScreen = ({ navigation }) => {
           {trendingCourses.length > 0 ? (
             <FlatList
               data={trendingCourses}
-              renderItem={({ item }) => <CourseItem course={item} />}
+              renderItem={({ item }) => (
+                <CourseItem course={item} onClick={handleCoursePressed} />
+              )}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[
@@ -242,7 +247,9 @@ const HomeScreen = ({ navigation }) => {
           {popularCourses.length > 0 ? (
             <FlatList
               data={popularCourses}
-              renderItem={({ item }) => <CourseItem course={item} />}
+              renderItem={({ item }) => (
+                <CourseItem course={item} onClick={handleCoursePressed} />
+              )}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[

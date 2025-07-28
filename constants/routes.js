@@ -11,4 +11,5 @@ export const ROUTES = {
   AUTH: 'AuthRoot',
   Main: 'MainRoot',
   SEARCH: 'SearchScreen',
+  DETAILS: 'DetailsSCreen',
 };

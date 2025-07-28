@@ -100,7 +100,7 @@ const SearchScreen = () => {
           )}
 
           <TouchableOpacity>
-            <Icon name="filter-outline" size={20} color={COLORS.primary} />
+            <Icon name="options-outline" size={20} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
       </View>

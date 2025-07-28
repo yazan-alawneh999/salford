@@ -58,6 +58,7 @@ export const getCourseById = async id => {
 
 export const getCourseDetails = async id => {
   const res = await api.get(`/courses/details/${id}`);
+
   return res.data;
 };
 

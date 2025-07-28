@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { tokenService } from './tokenService';
 
-const API_BASE_URL = 'https://c1f34f0138b8.ngrok-free.app';
+const API_BASE_URL = 'https://42514917a5d6.ngrok-free.app';
 export const IMAGE_BASE_URL = `${API_BASE_URL}/images`;
 
 const api = axios.create({

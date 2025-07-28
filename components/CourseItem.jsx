@@ -7,10 +7,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants/color';
 import { IMAGE_BASE_URL } from '../services/api';
 
-const CourseItem = ({ course }) => {
-  const router = useRoute();
+const CourseItem = ({ course, onClick }) => {
   return (
-    <TouchableOpacity onPress={() => {}} activeOpacity={0.9}>
+    <TouchableOpacity onPress={() => onClick(course)} activeOpacity={0.9}>
       {/* <View style={homeStyles.courseCard}> */}
       <View style={homeStyles.courseImageContainer}>
         <Image
