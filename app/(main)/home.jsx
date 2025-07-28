@@ -35,7 +35,8 @@ const HomeScreen = ({ navigation }) => {
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [popularCourses, setPopularCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { data: profile } = useSelector(state => state.profile);
+  const [courseLoading, setCourseLoading] = useState(false);
+  const { profile } = useSelector(state => state.profile);
 
   console.log(profile);
 
@@ -139,12 +140,14 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity style={homeStyles.homePrfilePicContainer}>
             <View style={homeStyles.profileImgContainer}>
-              <Image
-                source={{ uri: `${IMAGE_BASE_URL}/${profile?.image_url}` }}
-                style={homeStyles.homeProfileImg}
-                resizeMethod="cover"
-                transition={300}
-              />
+              {profile && (
+                <Image
+                  source={{ uri: `${IMAGE_BASE_URL}/${profile.image_url}` }}
+                  style={homeStyles.homeProfileImg}
+                  resizeMethod="cover"
+                  transition={300}
+                />
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -202,7 +205,9 @@ const HomeScreen = ({ navigation }) => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {trendingCourses.length > 0 ? (
+          {courseLoading ? (
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          ) : trendingCourses.length > 0 ? (
             <FlatList
               data={trendingCourses}
               renderItem={({ item }) => (
@@ -244,7 +249,9 @@ const HomeScreen = ({ navigation }) => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {popularCourses.length > 0 ? (
+          {courseLoading ? (
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          ) : popularCourses.length > 0 ? (
             <FlatList
               data={popularCourses}
               renderItem={({ item }) => (
