@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  // const [initialLoading, setInitialLoading] = useState(true);
   const [courses, setCourses] = useState([]);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -51,7 +51,7 @@ const SearchScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (initialLoading) return;
+    // if (initialLoading) return;
 
     const handleSearch = async () => {
       setLoading(true);
@@ -68,9 +68,9 @@ const SearchScreen = () => {
     };
 
     handleSearch();
-  }, [debouncedSearchQuery, initialLoading]);
+  }, [debouncedSearchQuery]);
 
-  if (initialLoading) return <LoadingSpinner message="Loading courses..." />;
+  // if (initialLoading) return <LoadingSpinner message="Loading courses..." />;
   return (
     <View style={searchStyles.container}>
       <View style={searchStyles.searchSection}>
