@@ -5,11 +5,42 @@ const { width } = Dimensions.get('window');
 const cardWidth = width / 2;
 
 export const homeStyles = StyleSheet.create({
+  // Blur and Action Menu Styles
+  blurView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 98,
+  },
+  androidBlurView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    zIndex: 98,
+  },
+  actionButtonContainer: {
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: COLORS.white,
+  },
   courseTextContainer: {
     paddingTop: 8,
     width: cardWidth,
     paddingHorizontal: 8,
   },
+
   title: {
     fontSize: 18,
     fontWeight: '600',
@@ -106,7 +137,7 @@ export const homeStyles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 50,
     paddingHorizontal: 16,
-    marginHorizontal: 20,
+    marginHorizontal: 12,
   },
   input: {
     paddingVertical: 8,

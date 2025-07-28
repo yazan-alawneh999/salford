@@ -10,4 +10,5 @@ export const ROUTES = {
   SIGNIN: 'signinScreen',
   AUTH: 'AuthRoot',
   Main: 'MainRoot',
+  SEARCH: 'SearchScreen',
 };

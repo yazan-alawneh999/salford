@@ -23,17 +23,21 @@ import {
   getCoursesByCategoryId,
 } from '../../services/apiService';
 import CourseItem from '../../components/CourseItem';
-import { useSelector } from 'react-redux';
 import { IMAGE_BASE_URL } from '../../services/api';
+import { useSelector } from 'react-redux';
+import FloatingMenu from '../../components/FloatingMenu';
+import { ROUTES } from '../../constants/routes';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [popularCourses, setPopularCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { profile } = useSelector(state => state.profile);
+  const { data: profile } = useSelector(state => state.profile);
+
+  console.log(profile);
 
   const fetchData = async () => {
     try {
@@ -86,6 +90,9 @@ const HomeScreen = () => {
       setPopularCourses([]);
     }
   };
+  const handleGoSearch = () => {
+    navigation.navigate(ROUTES.SEARCH);
+  };
 
   const handleCategorySelect = async category => {
     setSelectedCategory(category.name);
@@ -130,7 +137,7 @@ const HomeScreen = () => {
           <TouchableOpacity style={homeStyles.homePrfilePicContainer}>
             <View style={homeStyles.profileImgContainer}>
               <Image
-                source={{ uri: `${IMAGE_BASE_URL}/${profile.image_url}` }}
+                source={{ uri: `${IMAGE_BASE_URL}/${profile?.image_url}` }}
                 style={homeStyles.homeProfileImg}
                 resizeMethod="cover"
                 transition={300}
@@ -155,18 +162,24 @@ const HomeScreen = () => {
         </View>
 
         {/* search section */}
-        <View style={homeStyles.searchInputContainer}>
+        <TouchableOpacity
+          style={homeStyles.searchInputContainer}
+          onPress={handleGoSearch}
+          activeOpacity={0.8}
+        >
           <Icon name="search-outline" size={20} color={COLORS.hint} />
 
           <TextInput
             style={homeStyles.input}
             placeholder="Search Course"
             placeholderTextColor={COLORS.hint}
+            editable={false} // prevent typing
+            pointerEvents="none" // prevent touch
           />
           <TouchableOpacity>
             <Icon name="filter-outline" size={20} color={COLORS.primary} />
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
         {/* categories section */}
         <View style={homeStyles.section}>
           {categories.length > 0 && (
@@ -258,6 +271,7 @@ const HomeScreen = () => {
           )}
         </View>
       </ScrollView>
+      <FloatingMenu />
     </View>
   );
 };

@@ -16,10 +16,10 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      const result = await dispatch(checkAuth());
+      await dispatch(checkAuth());
 
       // if (result.payload?.userId) {
-      dispatch(fetchProfile());
+      await dispatch(fetchProfile());
       // console.log(result.payload.userId);
       // }
     };
