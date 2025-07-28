@@ -278,7 +278,6 @@ const HomeScreen = ({ navigation }) => {
           )}
         </View>
       </ScrollView>
-      <FloatingMenu />
     </View>
   );
 };
