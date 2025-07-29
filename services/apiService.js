@@ -93,7 +93,7 @@ export const subscribePlan = async (planId, userId) => {
   return res.data;
 };
 export const getSubscriptions = async () => {
-  const res = await api.post('/subscriptions');
+  const res = await api.get('/subscriptions');
   return res.data;
 };
 
@@ -105,6 +105,10 @@ export const getCategories = async () => {
 
 export const getCoursesByCategoryId = async categoryId => {
   const res = await api.get(`courses/category/${categoryId}`);
+  return res.data;
+};
+export const getSubjectDetails = async subjectId => {
+  const res = await api.get(`courses/subject/${subjectId}`);
   return res.data;
 };
 

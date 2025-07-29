@@ -8,7 +8,7 @@ import { COLORS } from '../constants/color';
 
 import { styles } from '../assets/styles/courseDetails.style';
 
-export const CourseCard = ({ subject, totalChapters, onClick }) => {
+export const SubjectCard = ({ subject, totalChapters, onClick }) => {
   return (
     <TouchableOpacity
       style={styles.card}

@@ -13,7 +13,7 @@ import { styles } from '../../assets/styles/courseDetails.style';
 import { homeStyles } from '../../assets/styles/home.style';
 import { COLORS } from '../../constants/color';
 import { getCourseDetails } from '../../services/apiService';
-import { CourseCard } from '../../components/CourseCard';
+import { CourseCard, SubjectCard } from '../../components/SubjectCard';
 import { ROUTES } from '../../constants/routes';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -93,13 +93,13 @@ const CourseDetailsScreen = ({ navigation, route }) => {
       <FlatList
         data={courseDetails.subjects}
         renderItem={({ item }) => (
-          <CourseCard
+          <SubjectCard
             subject={item}
             totalChapters={courseDetails.course.total_chapters}
             totalLessons={courseDetails.totalLessons}
             onClick={() => {
               navigation.navigate(ROUTES.SUBJECT_DETAILS, {
-                courseId: courseID,
+                subjectId: item.id,
               });
             }}
           />
@@ -148,8 +148,7 @@ const CourseDetailsScreen = ({ navigation, route }) => {
           </View>
         }
       />
-            <FloatingMenu navigation={navigation} />
-      
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };

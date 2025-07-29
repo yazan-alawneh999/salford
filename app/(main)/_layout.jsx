@@ -8,7 +8,7 @@ import FloatingMenu from '../../components/FloatingMenu';
 import { View } from 'react-native';
 import ProfileScreen from './profile';
 import CurrentCoursesScreen from './my-courses';
-import SubjectDetailsScreen from './subjects-details';
+import SubjectDetailsScreen from './subject-details';
 import PlansScreen from './subscription-plans';
 import PaymentMethod from './payment';
 

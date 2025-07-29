@@ -12,33 +12,35 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import LoadingSpinner from '../../components/LoadingSpinner.jsx';
 import {
-  getCourseDetails,
+  getSubjectDetails,
   getSubscriptions,
 } from '../../services/apiService.js';
 import { styles } from '../../assets/styles/lessonsDetails.js';
 import Video from 'react-native-video';
 import { COLORS } from '../../constants/color.js';
 import FloatingMenu from '../../components/FloatingMenu.jsx';
+import { IMAGE_BASE_URL } from '../../services/api.js';
 
-const lessonsDetailsScreen = ({ navigation, route }) => {
+const SubjectDetailsScreen = ({ navigation, route }) => {
   const [courseDetails, setCourseDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
-  const [susbscribtions, setsubscriptions] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
   const video = useRef(null);
-
+  const subjectId = route.params.subjectId;
   const fetchData = async () => {
     try {
       setLoading(true);
 
       const [courses, subscriptions] = await Promise.all([
-        await getCourseDetails(route.params.courseId),
+        await getSubjectDetails(route.params.subjectId),
         await getSubscriptions(),
       ]);
       setCourseDetails(courses);
-      setsubscriptions(subscriptions);
-      console.log(subscriptions);
+      setSubscriptions(subscriptions);
+      console.log(courses);
+      // console.log(subscriptions);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -81,6 +83,7 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
       >
         {/* Video Section */}
         <View style={styles.videoContainer}>
@@ -114,7 +117,7 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
           <View style={styles.metaRow}>
             <Icon name="book-outline" size={16} color={COLORS.textLight} />
             <Text style={styles.metaText}>
-              {courseDetails.totalLessons} Lessons
+              {courseDetails.lessons.length} Lessons
             </Text>
 
             <View style={styles.dot} />
@@ -122,27 +125,29 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
               {courseDetails.course.total_chapters} Chapters
             </Text>
           </View>
-          <Text style={styles.title}>{courseDetails.course.title_name}</Text>
+          <Text style={styles.title}>{courseDetails.subject.title}</Text>
         </View>
         {/* Avatars */}
-        <View style={styles.avatarsRow}>
-          {courseDetails.subscriptions?.slice(0, 3).map((instructor, index) => (
-            <Image
-              key={index}
-              source={{ uri: instructor.avatar }}
-              style={styles.avatar}
-            />
-          ))}
-          <View style={styles.moreCircle}>
-            <Text style={styles.moreText}>{courseDetails.enrolledCount}+</Text>
+        {subscriptions && (
+          <View style={styles.avatarsRow}>
+            {subscriptions?.slice(0, 3).map((subscriber, index) => (
+              <Image
+                key={index}
+                source={{ uri: `${IMAGE_BASE_URL}/${subscriber.image_url}` }}
+                style={styles.avatar}
+              />
+            ))}
+            <View style={styles.moreCircle}>
+              <Text style={styles.moreText}>{subscriptions.length}+</Text>
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Description */}
         <View style={styles.content}>
           <Text style={styles.title}>Description</Text>
           <Text style={styles.description}>
-            {courseDetails.course.description}
+            {courseDetails.subject.description}
           </Text>
         </View>
         {/* Weekly Lessons */}
@@ -159,8 +164,8 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
             </View>
           </View>
         ))}
-        {courseDetails.subjects.map(less => (
-          <Lesson name={less.title} />
+        {courseDetails.lessons.map(less => (
+          <Lesson lesson={less} />
         ))}
       </ScrollView>
       <FloatingMenu navigation={navigation} />
@@ -168,9 +173,9 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
   );
 };
 
-export default lessonsDetailsScreen;
+export default SubjectDetailsScreen;
 
-const Lesson = ({ name }) => {
+const Lesson = ({ lesson }) => {
   return (
     <View style={styles.content}>
       <View style={styles.metaRow}>
@@ -182,8 +187,15 @@ const Lesson = ({ name }) => {
         />
 
         <View style={styles.column}>
-          <Text style={styles.description}>1-2week</Text>
-          <Text style={styles.title}>{name}</Text>
+          <Text
+            style={[
+              styles.description,
+              { ...styles.description, fontWeight: '400' },
+            ]}
+          >
+            {lesson.estimated_weeks}
+          </Text>
+          <Text style={styles.title}>{lesson.title}</Text>
         </View>
       </View>
     </View>
