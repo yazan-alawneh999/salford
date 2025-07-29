@@ -71,12 +71,12 @@ const SignInScreen = ({ navigation }) => {
           <View style={authStyles.formContainer}>
             {/* Email Input */}
             <View style={authStyles.inputContainer}>
-              <Icon name="email-outline" size={20} color={COLORS.textLight} />
+              <Icon name="email-outline" size={20} color={COLORS.hint} />
 
               <TextInput
                 style={authStyles.textInput}
                 placeholder="Enter email"
-                placeholderTextColor={COLORS.textLight}
+                placeholderTextColor={COLORS.hint}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -87,12 +87,12 @@ const SignInScreen = ({ navigation }) => {
             {/* PASSWORD INPUT */}
             <View style={authStyles.inputContainer}>
               {/* <View style={authStyles.leaderIconInput}> */}
-              <Icon name="lock-outline" size={20} color={COLORS.textLight} />
+              <Icon name="lock-outline" size={20} color={COLORS.hint} />
               {/* </View> */}
               <TextInput
                 style={[authStyles.textInput]}
                 placeholder="Enter password"
-                placeholderTextColor={COLORS.textLight}
+                placeholderTextColor={COLORS.hint}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
@@ -106,7 +106,7 @@ const SignInScreen = ({ navigation }) => {
                 <Icon
                   name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                   size={22}
-                  color={COLORS.textLight}
+                  color={COLORS.hint}
                 />
               </TouchableOpacity>
             </View>
@@ -158,7 +158,7 @@ const SignInScreen = ({ navigation }) => {
             <View style={authStyles.rememberMeSection}>
               <View style={authStyles.switchContainer}>
                 <Switch
-                  trackColor={{ false: COLORS.textLight, true: COLORS.primary }}
+                  trackColor={{ false: COLORS.hint, true: COLORS.primary }}
                   thumbColor={isEnabled ? '#fff' : '#f4f3f4'}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={setIsEnabled}

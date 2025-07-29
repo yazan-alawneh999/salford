@@ -271,7 +271,7 @@ export const homeStyles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.shadow,
     marginTop: 16,
     marginBottom: 8,
   },

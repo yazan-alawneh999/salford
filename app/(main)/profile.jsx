@@ -24,19 +24,19 @@ const ProfileScreen = ({ navigation }) => {
     {
       title: 'Your History',
       onClick: () => {
-        navigation.navigate(ROUTES.HISTORY); // Add the correct route
+        // navigation.navigate(ROUTES.HISTORY); // Add the correct route
       },
     },
     {
       title: 'Certifications Earned',
       onClick: () => {
-        navigation.navigate(ROUTES.CERTIFICATIONS); // Add if it exists
+        // navigation.navigate(ROUTES.CERTIFICATIONS); // Add if it exists
       },
     },
     {
       title: 'Settings',
       onClick: () => {
-        navigation.navigate(ROUTES.SETTINGS); // Add if it exists
+        // navigation.navigate(ROUTES.SETTINGS); // Add if it exists
       },
     },
   ];

@@ -118,7 +118,7 @@ export const searchStyles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: COLORS.text,
+    color: COLORS.shadow,
     marginTop: 16,
     marginBottom: 8,
   },
@@ -204,7 +204,7 @@ export const searchStyles = StyleSheet.create({
     paddingVertical: 8,
     flex: 1,
     marginEnd: 2,
-    fontWeight: '200',
+    fontWeight: '400',
     paddingHorizontal: 8,
   },
 });

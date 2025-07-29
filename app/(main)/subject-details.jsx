@@ -27,6 +27,8 @@ const SubjectDetailsScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const video = useRef(null);
   const subjectId = route.params.subjectId;
   const fetchData = async () => {
@@ -93,11 +95,21 @@ const SubjectDetailsScreen = ({ navigation, route }) => {
             style={styles.videoImage}
             useNativeControls
             resizeMode="cover"
-            isLooping
+            paused={!isPlaying} // This controls whether it's playing
+            onEnd={() => setIsPlaying(false)} // Optional: reset on end
           />
-          <TouchableOpacity style={styles.playButton}>
-            <Icon name="play-circle" size={60} color="white" />
-          </TouchableOpacity>
+          {!isPlaying && (
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={() => setIsPlaying(true)}
+            >
+              <Icon
+                name={isPlaying ? 'pause-circle' : 'play-circle'}
+                size={60}
+                color="white"
+              />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}

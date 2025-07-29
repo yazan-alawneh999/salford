@@ -32,6 +32,9 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#333',
   },
+  imageProfile: {
+    borderRadius: 100,
+  },
   cardUserContainer: {
     flexDirection: 'row',
     gap: 12,
