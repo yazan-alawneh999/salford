@@ -92,6 +92,7 @@ const CurrentCoursesScreen = ({ navigation }) => {
           </View>
         }
       />
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };
@@ -139,7 +140,6 @@ const ProgressCourseCard = ({ course }) => {
           />
         </View>
       </View>
-      <FloatingMenu navigation={navigation} />
     </View>
   );
 };

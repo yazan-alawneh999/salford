@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '../../constants/color';
 
+const { height } = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    paddingHorizontal: 20,
   },
   listContent: {
     paddingBottom: 84,
   },
   centerContainer: {
     flex: 1,
-    justifyContent: 'center',
+
     alignItems: 'center',
     padding: 20,
   },
@@ -44,7 +44,14 @@ export const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 30,
   },
-  content: {},
+  videoContainer: {
+    width: '100%',
+    height: height * 0.3,
+  },
+  content: {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+  },
   lessonInfo: {
     color: '#888',
     fontSize: 13,
@@ -53,7 +60,6 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 16,
   },
   avatarsRow: {
     flexDirection: 'row',
@@ -87,9 +93,9 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
   description: {
-    color: '#444',
+    color: '#303030',
     fontSize: 14,
-    marginBottom: 20,
+    fontWeight: '300',
   },
   weekItem: {
     flexDirection: 'row',
@@ -111,6 +117,17 @@ export const styles = StyleSheet.create({
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
+  },
+  primaryCircleImage: {
+    backgroundColor: COLORS.primary,
+    padding: 8,
+    borderRadius: 100,
+  },
+  column: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 4,
   },
   metaText: {
     fontSize: 13,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import LoadingSpinner from '../../components/LoadingSpinner.jsx';
-import { getCourseDetails } from '../../services/apiService.js';
+import {
+  getCourseDetails,
+  getSubscriptions,
+} from '../../services/apiService.js';
 import { styles } from '../../assets/styles/lessonsDetails.js';
 import Video from 'react-native-video';
 import { COLORS } from '../../constants/color.js';
@@ -22,13 +25,20 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
-  const video = React.useRef(null);
+  const [susbscribtions, setsubscriptions] = useState([]);
+  const video = useRef(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await getCourseDetails(route.params.courseId);
-      setCourseDetails(response);
+
+      const [courses, subscriptions] = await Promise.all([
+        await getCourseDetails(route.params.courseId),
+        await getSubscriptions(),
+      ]);
+      setCourseDetails(courses);
+      setsubscriptions(subscriptions);
+      console.log(subscriptions);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -67,6 +77,7 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <ScrollView
+        contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -78,7 +89,7 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
             source={{ uri: courseDetails.course.video_url }}
             style={styles.videoImage}
             useNativeControls
-            resizeMode="contain"
+            resizeMode="cover"
             isLooping
           />
           <TouchableOpacity style={styles.playButton}>
@@ -99,56 +110,58 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
             Chapters
           </Text>
           <Text style={styles.title}>{courseDetails.title}</Text> */}
-          <View style={styles.content}>
-            <Text style={styles.title}>{courseDetails.subjects.title}</Text>
 
-            <View style={styles.metaRow}>
-              <Icon name="book-outline" size={16} color={COLORS.textLight} />
-              <Text style={styles.metaText}>
-                {courseDetails.totalLessons} Lessons
-              </Text>
+          <View style={styles.metaRow}>
+            <Icon name="book-outline" size={16} color={COLORS.textLight} />
+            <Text style={styles.metaText}>
+              {courseDetails.totalLessons} Lessons
+            </Text>
 
-              <View style={styles.dot} />
-              <Text style={styles.metaText}>
-                {courseDetails.course.total_chapters} Chapters
-              </Text>
-            </View>
+            <View style={styles.dot} />
+            <Text style={styles.metaText}>
+              {courseDetails.course.total_chapters} Chapters
+            </Text>
           </View>
-          {/* Avatars */}
-          <View style={styles.avatarsRow}>
-            {courseDetails.instructors?.slice(0, 3).map((instructor, index) => (
-              <Image
-                key={index}
-                source={{ uri: instructor.avatar }}
-                style={styles.avatar}
-              />
-            ))}
-            <View style={styles.moreCircle}>
-              <Text style={styles.moreText}>
-                {courseDetails.enrolledCount}+
-              </Text>
-            </View>
-          </View>
-
-          {/* Description */}
-          <Text style={styles.sectionTitle}>Description</Text>
-          <Text style={styles.description}>{courseDetails.description}</Text>
-
-          {/* Weekly Lessons */}
-          {courseDetails.weeks?.map((week, index) => (
-            <View key={index} style={styles.weekItem}>
-              <MaterialCommunityIcons
-                name="book-open"
-                size={24}
-                color="#00758F"
-              />
-              <View style={styles.weekText}>
-                <Text style={styles.weekTitle}>Week {week.number}:</Text>
-                <Text>{week.topic}</Text>
-              </View>
-            </View>
-          ))}
+          <Text style={styles.title}>{courseDetails.course.title_name}</Text>
         </View>
+        {/* Avatars */}
+        <View style={styles.avatarsRow}>
+          {courseDetails.subscriptions?.slice(0, 3).map((instructor, index) => (
+            <Image
+              key={index}
+              source={{ uri: instructor.avatar }}
+              style={styles.avatar}
+            />
+          ))}
+          <View style={styles.moreCircle}>
+            <Text style={styles.moreText}>{courseDetails.enrolledCount}+</Text>
+          </View>
+        </View>
+
+        {/* Description */}
+        <View style={styles.content}>
+          <Text style={styles.title}>Description</Text>
+          <Text style={styles.description}>
+            {courseDetails.course.description}
+          </Text>
+        </View>
+        {/* Weekly Lessons */}
+        {courseDetails.weeks?.map((week, index) => (
+          <View key={index} style={styles.weekItem}>
+            <MaterialCommunityIcons
+              name="book-open"
+              size={24}
+              color="#00758F"
+            />
+            <View style={styles.weekText}>
+              <Text style={styles.weekTitle}>Week {week.number}:</Text>
+              <Text>{week.topic}</Text>
+            </View>
+          </View>
+        ))}
+        {courseDetails.subjects.map(less => (
+          <Lesson name={less.title} />
+        ))}
       </ScrollView>
       <FloatingMenu navigation={navigation} />
     </View>
@@ -156,3 +169,23 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
 };
 
 export default lessonsDetailsScreen;
+
+const Lesson = ({ name }) => {
+  return (
+    <View style={styles.content}>
+      <View style={styles.metaRow}>
+        <Icon
+          name="book-outline"
+          size={20}
+          style={styles.primaryCircleImage}
+          color="white"
+        />
+
+        <View style={styles.column}>
+          <Text style={styles.description}>1-2week</Text>
+          <Text style={styles.title}>{name}</Text>
+        </View>
+      </View>
+    </View>
+  );
+};

@@ -148,7 +148,8 @@ const CourseDetailsScreen = ({ navigation, route }) => {
           </View>
         }
       />
-      <FloatingMenu navigation={navigation} />
+            <FloatingMenu navigation={navigation} />
+      
     </View>
   );
 };

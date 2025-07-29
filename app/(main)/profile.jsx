@@ -11,32 +11,35 @@ import { IMAGE_BASE_URL } from '../../services/api';
 import { ROUTES } from '../../constants/routes';
 import FloatingMenu from '../../components/FloatingMenu';
 
-const options = [
-  {
-    title: 'Your Current Courses',
-    onClick: navigation => {
-      navigation.navigate(ROUTES.CURRENT_COURSES);
-    },
-  },
-
-  {
-    title: 'Your History',
-    onClick: navigation => {},
-  },
-
-  {
-    title: 'Certifications Earned',
-    onClick: navigation => {},
-  },
-
-  {
-    title: 'Settings',
-    onClick: navigation => {},
-  },
-];
-
 const ProfileScreen = ({ navigation }) => {
   const { profile } = useSelector(state => state.profile);
+
+  const options = [
+    {
+      title: 'Your Current Courses',
+      onClick: () => {
+        navigation.navigate(ROUTES.CURRENT_COURSES);
+      },
+    },
+    {
+      title: 'Your History',
+      onClick: () => {
+        navigation.navigate(ROUTES.HISTORY); // Add the correct route
+      },
+    },
+    {
+      title: 'Certifications Earned',
+      onClick: () => {
+        navigation.navigate(ROUTES.CERTIFICATIONS); // Add if it exists
+      },
+    },
+    {
+      title: 'Settings',
+      onClick: () => {
+        navigation.navigate(ROUTES.SETTINGS); // Add if it exists
+      },
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -87,7 +90,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
         {/* Options */}
         {options.map(opt => (
-          <ProfileCard key={opt.title} opt={opt} navigation={navigation} />
+          <ProfileCard key={opt.title} opt={opt} />
         ))}
       </ScrollView>
       <FloatingMenu navigation={navigation} />
@@ -97,12 +100,12 @@ const ProfileScreen = ({ navigation }) => {
 
 export default ProfileScreen;
 
-export const ProfileCard = ({ opt, navigation }) => {
+export const ProfileCard = ({ opt }) => {
   return (
     <TouchableOpacity
       style={styles.cardUserContainer}
       activeOpacity={0.7}
-      onPress={() => opt.onClick(navigation)}
+      onPress={opt.onClick}
     >
       <View style={styles.profileOptionRow}>
         <Text style={styles.optionTitle}>{opt.title}</Text>
