@@ -8,9 +8,13 @@ import { COLORS } from '../constants/color';
 
 import { styles } from '../assets/styles/courseDetails.style';
 
-export const CourseCard = ({ subject, totalChapters }) => {
+export const CourseCard = ({ subject, totalChapters, onClick }) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.8}
+      onPress={() => onClick()}
+    >
       <View style={styles.content}>
         <Text style={styles.title}>{subject.title}</Text>
 
@@ -33,6 +37,6 @@ export const CourseCard = ({ subject, totalChapters }) => {
         </TouchableOpacity>
         <Text style={styles.duration}>{subject.estimated_time_text}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };

@@ -14,4 +14,5 @@ export const ROUTES = {
   DETAILS: 'DetailsSCreen',
   PROFILE: 'ProfileScreen',
   CURRENT_COURSES: 'CurrenctCouseScreen',
+  SUBJECT_DETAILS: 'SubjectDetailsScreen',
 };

@@ -58,7 +58,7 @@ export const getCourseById = async id => {
 
 export const getCourseDetails = async id => {
   const res = await api.get(`/courses/details/${id}`);
-
+  console.log(res.data);
   return res.data;
 };
 
@@ -124,7 +124,10 @@ export const getCurrentCourses = async () => {
     console.log('Currenct courses data:', res.data);
     return res.data;
   } catch (error) {
-    console.error('Get Current Courses Error:', error.response?.data || error.message);
+    console.error(
+      'Get Current Courses Error:',
+      error.response?.data || error.message,
+    );
     throw error;
   }
 };

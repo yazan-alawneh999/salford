@@ -14,6 +14,7 @@ import { homeStyles } from '../../assets/styles/home.style';
 import { COLORS } from '../../constants/color';
 import { getCourseDetails } from '../../services/apiService';
 import { CourseCard } from '../../components/CourseCard';
+import { ROUTES } from '../../constants/routes';
 
 const CourseDetailsScreen = ({ navigation, route }) => {
   const [courseDetails, setCourseDetails] = useState(null);
@@ -21,12 +22,13 @@ const CourseDetailsScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const courseID = route.params.courseId;
 
   // Fetch data from server
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await getCourseDetails(route.params.courseId);
+      const response = await getCourseDetails(courseID);
 
       // Assuming response.data has featuredCourse and courses array
       setCourseDetails(response);
@@ -94,6 +96,11 @@ const CourseDetailsScreen = ({ navigation, route }) => {
             subject={item}
             totalChapters={courseDetails.course.total_chapters}
             totalLessons={courseDetails.totalLessons}
+            onClick={() => {
+              navigation.navigate(ROUTES.SUBJECT_DETAILS, {
+                courseId: courseID,
+              });
+            }}
           />
         )}
         keyExtractor={item => item.id.toString()}

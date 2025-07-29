@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import ProfileScreen from './profile';
 import { useNavigation } from '@react-navigation/native';
 import CurrentCoursesScreen from './my-courses';
+import SubjectDetailsScreen from './subjects-details';
 
 const MainStack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ const MainRoot = () => {
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1 }}>
-      <MainStack.Navigator initialRouteName={ROUTES.PROFILE}>
+      <MainStack.Navigator initialRouteName={ROUTES.HOME}>
         <MainStack.Screen
           name={ROUTES.HOME}
           options={{ headerShown: false }}
@@ -41,6 +42,11 @@ const MainRoot = () => {
           name={ROUTES.CURRENT_COURSES}
           options={{ headerShown: false }}
           component={CurrentCoursesScreen}
+        />
+        <MainStack.Screen
+          name={ROUTES.SUBJECT_DETAILS}
+          options={{ headerShown: false }}
+          component={SubjectDetailsScreen}
         />
       </MainStack.Navigator>
       <FloatingMenu navigation={navigation} />
