@@ -137,29 +137,6 @@ const SignUpScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            {/* <TouchableOpacity
-              // style={[
-              //   authStyles.authButton,
-              //   loading && authStyles.buttonDisabled,
-              // ]}
-              onPress={() => {}}
-              disabled={loading}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={['#087E8B', '#0B3954']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={[
-                  authStyles.authButton,
-                  loading && authStyles.buttonDisabled,
-                ]}
-              >
-                <Text style={authStyles.buttonText}>
-                  {loading ? 'Login...' : 'Login'}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={handleSignUp}
               disabled={loading}

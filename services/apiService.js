@@ -88,6 +88,11 @@ export const getPlans = async () => {
   return res.data;
 };
 
+export const subscribePlan = async (planId, userId) => {
+  const res = await api.post('/subscriptions/create', { planId, userId });
+  return res.data;
+};
+
 // Categories
 export const getCategories = async () => {
   const res = await api.get('/categories');

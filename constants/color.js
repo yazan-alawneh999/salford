@@ -5,10 +5,11 @@ const slafordTheme = {
   text: '#84838399',
   border: '#087E8B',
   white: '#FFFFFF',
-  textLight: '#6E6E6E60',
+  textLight: '#747688',
   card: '#FFFFFF',
   shadow: '#000000',
   hint: '#74768860',
+  hintDark: '#6E6E6E',
 };
 
 // 👇 change this to switch theme

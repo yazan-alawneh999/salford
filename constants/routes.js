@@ -15,4 +15,6 @@ export const ROUTES = {
   PROFILE: 'ProfileScreen',
   CURRENT_COURSES: 'CurrenctCouseScreen',
   SUBJECT_DETAILS: 'SubjectDetailsScreen',
+  SUBSCRIPTIONS_PLAN: 'PlansScreen',
+  PAYMENT_METHOD: 'paymentMethodScreen',
 };
