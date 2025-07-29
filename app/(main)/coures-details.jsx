@@ -15,6 +15,7 @@ import { COLORS } from '../../constants/color';
 import { getCourseDetails } from '../../services/apiService';
 import { CourseCard } from '../../components/CourseCard';
 import { ROUTES } from '../../constants/routes';
+import FloatingMenu from '../../components/FloatingMenu';
 
 const CourseDetailsScreen = ({ navigation, route }) => {
   const [courseDetails, setCourseDetails] = useState(null);
@@ -147,6 +148,7 @@ const CourseDetailsScreen = ({ navigation, route }) => {
           </View>
         }
       />
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };

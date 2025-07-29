@@ -13,8 +13,9 @@ import AllCoursesItem from '../../components/AllCoursesItem';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useEffect, useState } from 'react';
+import FloatingMenu from '../../components/FloatingMenu';
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   // const [initialLoading, setInitialLoading] = useState(true);
@@ -43,7 +44,7 @@ const SearchScreen = () => {
       } catch (error) {
         console.error('Error loading initial data:', error);
       } finally {
-        setInitialLoading(false);
+        // setInitialLoading(false);
       }
     };
 
@@ -128,6 +129,7 @@ const SearchScreen = () => {
           />
         )}
       </View>
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 

@@ -4,13 +4,17 @@ import { BlurView } from '@react-native-community/blur';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionButton from 'react-native-circular-action-menu';
 import { COLORS } from '../constants/color';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+
 import { ROUTES } from '../constants/routes';
 
 const { width, height } = Dimensions.get('window');
 
 export default function FloatingMenu({ navigation }) {
   const [open, setOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const route = useRoute();
+  const currentRoute = route.name;
 
   const actionButtonRef = useRef(null);
   const radius = 120;
@@ -73,71 +77,124 @@ export default function FloatingMenu({ navigation }) {
           onClose={() => handleMenuToggle(false)}
           backdrop={<></>}
         >
+          {/* Grid */}
           <ActionButton.Item
-            buttonColor={COLORS.white}
+            buttonColor={
+              currentRoute === ROUTES.SEARCH ? COLORS.primary : COLORS.white
+            }
             title="Grid"
             onPress={() => {
-              console.log('Grid tapped');
-              navigation.navigate(ROUTES.SEARCH);
+              if (currentRoute !== ROUTES.SEARCH) {
+                navigation.navigate(ROUTES.SEARCH);
+              }
               handleMenuToggle(false);
             }}
           >
-            <Icon name="grid-outline" style={[styles.icon, styles.iconDark]} />
+            <Icon
+              name="grid-outline"
+              style={[
+                styles.icon,
+                currentRoute === ROUTES.SEARCH
+                  ? styles.iconLight
+                  : styles.iconDark,
+              ]}
+            />
           </ActionButton.Item>
 
+          {/* Bookmark */}
           <ActionButton.Item
-            buttonColor={COLORS.white}
+            buttonColor={
+              currentRoute === ROUTES.BOOKMARK ? COLORS.primary : COLORS.white
+            }
             title="Bookmark"
             onPress={() => {
-              console.log('Bookmark tapped');
+              // if (currentRoute !== ROUTES.BOOKMARK) {
+              //   navigation.navigate(ROUTES.BOOKMARK);
+              // }
               handleMenuToggle(false);
             }}
           >
             <Icon
               name="bookmark-outline"
-              style={[styles.icon, styles.iconDark]}
+              style={[
+                styles.icon,
+                currentRoute === ROUTES.BOOKMARK
+                  ? styles.iconLight
+                  : styles.iconDark,
+              ]}
             />
           </ActionButton.Item>
 
+          {/* User */}
           <ActionButton.Item
-            buttonColor={COLORS.white}
+            buttonColor={
+              currentRoute === ROUTES.PROFILE ? COLORS.primary : COLORS.white
+            }
             title="User"
             onPress={() => {
-              console.log('User tapped');
-              navigation.navigate(ROUTES.PROFILE);
+              if (currentRoute !== ROUTES.PROFILE) {
+                navigation.navigate(ROUTES.PROFILE);
+              }
               handleMenuToggle(false);
             }}
           >
             <Icon
               name="person-outline"
-              style={[styles.icon, styles.iconDark]}
+              style={[
+                styles.icon,
+                currentRoute === ROUTES.PROFILE
+                  ? styles.iconLight
+                  : styles.iconDark,
+              ]}
             />
           </ActionButton.Item>
 
+          {/* Settings */}
           <ActionButton.Item
-            buttonColor={COLORS.white}
+            buttonColor={
+              currentRoute === ROUTES.SETTINGS ? COLORS.primary : COLORS.white
+            }
             title="Settings"
             onPress={() => {
-              console.log('Settings tapped');
+              // if (currentRoute !== ROUTES.SETTINGS) {
+              //   navigation.navigate(ROUTES.SETTINGS);
+              // }
               handleMenuToggle(false);
             }}
           >
             <Icon
               name="settings-outline"
-              style={[styles.icon, styles.iconDark]}
+              style={[
+                styles.icon,
+                currentRoute === ROUTES.SETTINGS
+                  ? styles.iconLight
+                  : styles.iconDark,
+              ]}
             />
           </ActionButton.Item>
 
+          {/* Home */}
           <ActionButton.Item
-            buttonColor={COLORS.primary}
+            buttonColor={
+              currentRoute === ROUTES.HOME ? COLORS.primary : COLORS.white
+            }
             title="Home"
             onPress={() => {
-              console.log('Home tapped');
-              navigation.navigate(ROUTES.HOME);
+              if (currentRoute !== ROUTES.HOME) {
+                navigation.navigate(ROUTES.HOME);
+              }
               handleMenuToggle(false);
             }}
           >
-            <Icon name="home-outline" style={[styles.icon, styles.iconLight]} />
+            <Icon
+              name="home-outline"
+              style={[
+                styles.icon,
+                currentRoute === ROUTES.HOME
+                  ? styles.iconLight
+                  : styles.iconDark,
+              ]}
+            />
           </ActionButton.Item>
         </ActionButton>
       </View>

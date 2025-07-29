@@ -15,6 +15,7 @@ import { getCourseDetails } from '../../services/apiService.js';
 import { styles } from '../../assets/styles/lessonsDetails.js';
 import Video from 'react-native-video';
 import { COLORS } from '../../constants/color.js';
+import FloatingMenu from '../../components/FloatingMenu.jsx';
 
 const lessonsDetailsScreen = ({ navigation, route }) => {
   const [courseDetails, setCourseDetails] = useState(null);
@@ -149,6 +150,7 @@ const lessonsDetailsScreen = ({ navigation, route }) => {
           ))}
         </View>
       </ScrollView>
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };

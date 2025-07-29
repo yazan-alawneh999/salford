@@ -190,7 +190,8 @@ export const searchStyles = StyleSheet.create({
   },
   coursesGrid: {
     gap: 30,
-    paddingVertical: 25,
+    paddingTop: 25,
+    paddingBottom: 84,
   },
   searchInputContainer: {
     flexDirection: 'row',

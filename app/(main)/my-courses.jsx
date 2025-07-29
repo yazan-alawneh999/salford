@@ -13,6 +13,7 @@ import { COLORS } from '../../constants/color';
 import { getCurrentCourses } from '../../services/apiService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { IMAGE_BASE_URL } from '../../services/api';
+import FloatingMenu from '../../components/FloatingMenu';
 
 const CurrentCoursesScreen = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
@@ -138,6 +139,7 @@ const ProgressCourseCard = ({ course }) => {
           />
         </View>
       </View>
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };

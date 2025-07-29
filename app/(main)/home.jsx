@@ -27,6 +27,7 @@ import { IMAGE_BASE_URL } from '../../services/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import { fetchProfile } from '../../redux/slices/profileSlice ';
+import FloatingMenu from '../../components/FloatingMenu';
 
 const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -287,6 +288,8 @@ const HomeScreen = ({ navigation }) => {
           )}
         </View>
       </ScrollView>
+            <FloatingMenu navigation={navigation} />
+      
     </View>
   );
 };

@@ -7,7 +7,6 @@ import CourseDetailsScreen from './coures-details';
 import FloatingMenu from '../../components/FloatingMenu';
 import { View } from 'react-native';
 import ProfileScreen from './profile';
-import { useNavigation } from '@react-navigation/native';
 import CurrentCoursesScreen from './my-courses';
 import SubjectDetailsScreen from './subjects-details';
 import PlansScreen from './subscription-plans';
@@ -16,53 +15,49 @@ import PaymentMethod from './payment';
 const MainStack = createNativeStackNavigator();
 
 const MainRoot = () => {
-  const navigation = useNavigation();
   return (
-    <View style={{ flex: 1 }}>
-      <MainStack.Navigator initialRouteName={ROUTES.SUBSCRIPTIONS_PLAN}>
-        <MainStack.Screen
-          name={ROUTES.HOME}
-          options={{ headerShown: false }}
-          component={HomeScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.SEARCH}
-          options={{ headerShown: false }}
-          component={SearchScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.DETAILS}
-          options={{ headerShown: false }}
-          component={CourseDetailsScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.PROFILE}
-          options={{ headerShown: false }}
-          component={ProfileScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.CURRENT_COURSES}
-          options={{ headerShown: false }}
-          component={CurrentCoursesScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.SUBJECT_DETAILS}
-          options={{ headerShown: false }}
-          component={SubjectDetailsScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.SUBSCRIPTIONS_PLAN}
-          options={{ headerShown: false }}
-          component={PlansScreen}
-        />
-        <MainStack.Screen
-          name={ROUTES.PAYMENT_METHOD}
-          options={{ headerShown: false }}
-          component={PaymentMethod}
-        />
-      </MainStack.Navigator>
-      <FloatingMenu navigation={navigation} />
-    </View>
+    <MainStack.Navigator initialRouteName={ROUTES.HOME}>
+      <MainStack.Screen
+        name={ROUTES.HOME}
+        options={{ headerShown: false }}
+        component={HomeScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.SEARCH}
+        options={{ headerShown: false }}
+        component={SearchScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.DETAILS}
+        options={{ headerShown: false }}
+        component={CourseDetailsScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.PROFILE}
+        options={{ headerShown: false }}
+        component={ProfileScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.CURRENT_COURSES}
+        options={{ headerShown: false }}
+        component={CurrentCoursesScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.SUBJECT_DETAILS}
+        options={{ headerShown: false }}
+        component={SubjectDetailsScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.SUBSCRIPTIONS_PLAN}
+        options={{ headerShown: false }}
+        component={PlansScreen}
+      />
+      <MainStack.Screen
+        name={ROUTES.PAYMENT_METHOD}
+        options={{ headerShown: false }}
+        component={PaymentMethod}
+      />
+    </MainStack.Navigator>
   );
 };
 

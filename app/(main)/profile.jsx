@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { COLORS } from '../../constants/color';
 import { IMAGE_BASE_URL } from '../../services/api';
 import { ROUTES } from '../../constants/routes';
+import FloatingMenu from '../../components/FloatingMenu';
 
 const options = [
   {
@@ -89,6 +90,7 @@ const ProfileScreen = ({ navigation }) => {
           <ProfileCard key={opt.title} opt={opt} navigation={navigation} />
         ))}
       </ScrollView>
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };
