@@ -16,8 +16,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Google from '../../assets/images/Google.svg';
 import Apple from '../../assets/images/Vector.svg';
 import { ROUTES } from '../../constants/routes';
-import { signIn } from '../../services/au thService';
-import { showMessage } from 'react-native-flash-message'; // Install if needed
+import { signIn } from '../../services/authService';
+import { showMessage } from 'react-native-flash-message';
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');

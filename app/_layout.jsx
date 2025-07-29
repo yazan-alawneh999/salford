@@ -21,7 +21,7 @@ export default function RootStack({ isAuthenticated, isLoading }) {
     );
   return (
     <Stack.Navigator
-      initialRouteName={isAuthenticated ? ROUTES.Main : ROUTES.AUTH}
+      initialRouteName={isAuthenticated ? ROUTES.Main : ROUTES.INTRO}
     >
       <Stack.Screen
         name={ROUTES.INTRO}
@@ -43,41 +43,3 @@ export default function RootStack({ isAuthenticated, isLoading }) {
     </Stack.Navigator>
   );
 }
-
-// export default function RootStack() {
-//   const { authToken } = useAuth();
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen
-//         name={ROUTES.INTRO}
-//         component={IntroRoot}
-//         options={{ headerShown: false }}
-//       />
-
-//       {authToken ? (
-//         <Stack.Screen
-//           name={ROUTES.Main}
-//           component={MainRoot}
-//           options={{ headerShown: false }}
-//         />
-//       ) : (
-//         <Stack.Screen
-//           name={ROUTES.AUTH}
-//           component={AuthRoot}
-//           options={{ headerShown: false }}
-//         />
-//       )}
-//       <Stack.Screen
-//         name={ROUTES.AUTH}
-//         component={AuthRoot}
-//         options={{ headerShown: false }}
-//       />
-
-//       {/* <Stack.Screen
-//         name={ROUTES.Main}
-//         component={MainRoot}
-//         options={{ headerShown: false }}
-//       /> */}
-//     </Stack.Navigator>
-//   );
-// }
