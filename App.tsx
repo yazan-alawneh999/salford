@@ -17,11 +17,7 @@ function App() {
   useEffect(() => {
     const initialize = async () => {
       await dispatch(checkAuth());
-
-      // if (result.payload?.userId) {
       await dispatch(fetchProfile());
-      // console.log(result.payload.userId);
-      // }
     };
     initialize();
   }, [dispatch]);

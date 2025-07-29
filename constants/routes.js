@@ -12,4 +12,6 @@ export const ROUTES = {
   Main: 'MainRoot',
   SEARCH: 'SearchScreen',
   DETAILS: 'DetailsSCreen',
+  PROFILE: 'ProfileScreen',
+  CURRENT_COURSES: 'CurrenctCouseScreen',
 };

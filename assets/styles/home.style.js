@@ -100,7 +100,7 @@ export const homeStyles = StyleSheet.create({
   welcomeText: {
     fontSize: 18,
     fontWeight: '400',
-    color: COLORS.text,
+    color: COLORS.shadow,
     letterSpacing: -0.5,
     flex: 1,
   },

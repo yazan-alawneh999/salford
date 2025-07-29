@@ -113,3 +113,18 @@ export const getProfile = async () => {
     throw error;
   }
 };
+
+export const getCurrentCourses = async () => {
+  try {
+    const userId = await tokenService.getUserId();
+    if (!userId) {
+      throw new Error('User not authenticated');
+    }
+    const res = await api.get(`/courses/progress/${userId}`);
+    console.log('Currenct courses data:', res.data);
+    return res.data;
+  } catch (error) {
+    console.error('Get Current Courses Error:', error.response?.data || error.message);
+    throw error;
+  }
+};

@@ -4,12 +4,14 @@ import { BlurView } from '@react-native-community/blur';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionButton from 'react-native-circular-action-menu';
 import { COLORS } from '../constants/color';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../constants/routes';
 
 const { width, height } = Dimensions.get('window');
 
-export default function FloatingMenu() {
+export default function FloatingMenu({ navigation }) {
   const [open, setOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+
   const actionButtonRef = useRef(null);
   const radius = 120;
 
@@ -62,7 +64,7 @@ export default function FloatingMenu() {
         <ActionButton
           ref={actionButtonRef}
           position="center"
-          buttonColor={menuOpen ? COLORS.white : COLORS.primary}
+          buttonColor={COLORS.primary}
           offsetY={0}
           spacing={10}
           outRangeScale={1}
@@ -70,13 +72,13 @@ export default function FloatingMenu() {
           onOpen={() => handleMenuToggle(true)}
           onClose={() => handleMenuToggle(false)}
           backdrop={<></>}
-          active={menuOpen}
         >
           <ActionButton.Item
             buttonColor={COLORS.white}
             title="Grid"
             onPress={() => {
               console.log('Grid tapped');
+              navigation.navigate(ROUTES.SEARCH);
               handleMenuToggle(false);
             }}
           >
@@ -102,6 +104,7 @@ export default function FloatingMenu() {
             title="User"
             onPress={() => {
               console.log('User tapped');
+              navigation.navigate(ROUTES.PROFILE);
               handleMenuToggle(false);
             }}
           >
@@ -130,6 +133,7 @@ export default function FloatingMenu() {
             title="Home"
             onPress={() => {
               console.log('Home tapped');
+              navigation.navigate(ROUTES.HOME);
               handleMenuToggle(false);
             }}
           >

@@ -154,7 +154,8 @@ export const styles = StyleSheet.create({
   },
   rightColumn: {
     alignItems: 'flex-end',
-    gap: 12,
+    gap: 20,
+    justifyContent: 'space-between',
   },
   duration: {
     fontSize: 12,

@@ -24,9 +24,9 @@ import {
 } from '../../services/apiService';
 import CourseItem from '../../components/CourseItem';
 import { IMAGE_BASE_URL } from '../../services/api';
-import { useSelector } from 'react-redux';
-import FloatingMenu from '../../components/FloatingMenu';
+import { useSelector, useDispatch } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
+import { fetchProfile } from '../../redux/slices/profileSlice ';
 
 const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -37,6 +37,7 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [courseLoading, setCourseLoading] = useState(false);
   const { profile } = useSelector(state => state.profile);
+  const dispatch = useDispatch();
 
   console.log(profile);
 
@@ -46,6 +47,7 @@ const HomeScreen = ({ navigation }) => {
         getCategories(),
         getTrendingCourses(),
         getPopularCourses(),
+        dispatch(fetchProfile()),
       ]);
       if (!selectedCategory) {
         setSelectedCategory(catRes[0].name);
