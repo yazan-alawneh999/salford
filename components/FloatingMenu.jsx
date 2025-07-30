@@ -108,9 +108,9 @@ export default function FloatingMenu({ navigation }) {
             }
             title="Bookmark"
             onPress={() => {
-              // if (currentRoute !== ROUTES.BOOKMARK) {
-              //   navigation.navigate(ROUTES.BOOKMARK);
-              // }
+              if (currentRoute !== ROUTES.BOOKMARK) {
+                navigation.navigate(ROUTES.SUBSCRIPTIONS_PLAN);
+              }
               handleMenuToggle(false);
             }}
           >

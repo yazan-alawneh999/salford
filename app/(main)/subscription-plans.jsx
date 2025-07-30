@@ -133,7 +133,13 @@ const PlanItem = ({ plan, onClick }) => {
     );
   }
   return (
-    <TouchableOpacity style={styles.cardUserContainer} activeOpacity={0.8}>
+    <TouchableOpacity
+      style={styles.cardUserContainer}
+      activeOpacity={0.8}
+      onPress={() => {
+        onClick(plan.id);
+      }}
+    >
       <View style={styles.dataRow}>
         <Text style={styles.headerTitle}>{plan.name}</Text>
         <Text style={styles.priceTitle}>${plan.price}</Text>
