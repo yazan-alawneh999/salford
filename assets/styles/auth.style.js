@@ -7,6 +7,7 @@ export const authStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    fontFamily: 'ClashDisplay-Regular',
   },
   leaderIconInput: {
     marginStart: 8,

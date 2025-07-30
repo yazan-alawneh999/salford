@@ -8,6 +8,7 @@ export const getstartedStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     paddingHorizontal: 20,
+    fontFamily: 'ClashDisplay-Regular',
   },
   imageContainer: {
     borderRadius: 24,

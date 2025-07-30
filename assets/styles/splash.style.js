@@ -8,6 +8,7 @@ export const splashStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     alignItems: 'center',
+    fontFamily: 'ClashDisplay-Regular',
     // justifyContent: 'space-between',
   },
 

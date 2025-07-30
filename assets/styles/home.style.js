@@ -59,6 +59,7 @@ export const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    fontFamily: 'ClashDisplay-Regular',
   },
   center: {
     flex: 1,

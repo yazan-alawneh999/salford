@@ -7,6 +7,7 @@ export const searchStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    fontFamily: 'ClashDisplay-Regular',
   },
   searchSection: {
     paddingHorizontal: 16,

@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     paddingHorizontal: 20,
+    fontFamily: 'ClashDisplay-Regular',
   },
   listContent: {
     paddingBottom: 84,
