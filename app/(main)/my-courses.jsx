@@ -6,37 +6,24 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { styles } from '../../assets/styles/currentCourse.style';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../constants/color';
-import { getCurrentCourses } from '../../services/apiService';
+import { useCurrentCoursesQuery } from '../../services/apiService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { IMAGE_BASE_URL } from '../../services/api';
 import FloatingMenu from '../../components/FloatingMenu';
 
 const CurrentCoursesScreen = ({ navigation }) => {
-  const [courses, setCourses] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: courses,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useCurrentCoursesQuery();
 
-  const loadCourses = async () => {
-    try {
-      setLoading(true);
-      const response = await getCurrentCourses();
-      setCourses(response);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-  useEffect(() => {
-    loadCourses();
-  }, []);
-
-  if (loading && !refreshing) {
+  if (isLoading) {
     return (
       <View style={styles.centerContainer}>
         <LoadingSpinner message="laoding courses..." size="small" />
@@ -44,11 +31,6 @@ const CurrentCoursesScreen = ({ navigation }) => {
     );
   }
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadCourses();
-    setRefreshing(false);
-  };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -74,8 +56,8 @@ const CurrentCoursesScreen = ({ navigation }) => {
         keyExtractor={item => item.id.toString()}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
+            refreshing={isFetching}
+            onRefresh={refetch}
             colors={[COLORS.primary]}
           />
         }

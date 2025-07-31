@@ -5,14 +5,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { styles } from '../../assets/styles/profile.style';
 import { homeStyles } from '../../assets/styles/home.style'; // Adjust path if needed
-import { useSelector } from 'react-redux';
+import { useProfileQuery } from '../../services/apiService';
 import { COLORS } from '../../constants/color';
 import { IMAGE_BASE_URL } from '../../services/api';
 import { ROUTES } from '../../constants/routes';
 import FloatingMenu from '../../components/FloatingMenu';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const ProfileScreen = ({ navigation }) => {
-  const { profile } = useSelector(state => state.profile);
+  const { data: profile, isLoading } = useProfileQuery();
 
   const options = [
     {
@@ -40,6 +41,10 @@ const ProfileScreen = ({ navigation }) => {
       },
     },
   ];
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <View style={styles.container}>
