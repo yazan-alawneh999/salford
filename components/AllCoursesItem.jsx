@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { memo } from 'react';
 import { searchStyles } from '../assets/styles/search.styles';
 import { useRoute } from '@react-navigation/native';
 import { ROUTES } from '../constants/routes';
@@ -47,4 +47,4 @@ const AllCoursesItem = ({ course }) => {
   );
 };
 
-export default AllCoursesItem;
+export default memo(AllCoursesItem);
