@@ -1,28 +1,72 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# SalfordApp
 
-# Getting Started
+SalfordApp is a mobile application for an online learning platform, built with React Native. It allows users to browse, purchase, and consume educational courses on the go.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+-   **User Authentication:** Secure sign-up and sign-in functionality.
+-   **Course Catalog:** Browse a wide range of courses with detailed descriptions.
+-   **Categories and Filtering:** Easily find courses by filtering through categories.
+-   **Trending and Popular Courses:** Discover new and popular courses on the home screen.
+-   **My Courses:** Access all your purchased courses in one place.
+-   **Subscription Plans:** Choose from various subscription plans to access premium content.
+-   **User Profile:** Manage your profile and track your learning progress.
+-   **Search:** Quickly find courses using the search functionality.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Technologies Used
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+-   **React Native:** A framework for building native apps using React.
+-   **React Navigation:** For routing and navigation between screens.
+-   **Redux Toolkit:** For predictable state management.
+-   **React Query:** For data fetching, caching, and state synchronization.
+-   **Axios:** A promise-based HTTP client for making API requests.
+-   **React Native SVG:** For displaying SVG images.
+-   **React Native Vector Icons:** For using customizable icons.
 
-```sh
-# Using npm
-npm start
+## Prerequisites
 
-# OR using Yarn
-yarn start
-```
+Before you begin, ensure you have the following installed:
 
-## Step 2: Build and run your app
+-   Node.js (v18 or higher)
+-   npm or Yarn
+-   React Native CLI
+-   Android Studio (for Android development)
+-   Xcode (for iOS development)
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+For a detailed guide on setting up your environment, please refer to the [official React Native documentation](https://reactnative.dev/docs/set-up-your-environment).
 
-### Android
+## Installation
+
+1.  **Clone the repository:**
+
+    ```sh
+    git clone https://github.com/your-username/SalfordApp.git
+    cd SalfordApp
+    ```
+
+2.  **Install dependencies:**
+
+    Using npm:
+    ```sh
+    npm install
+    ```
+
+    Using Yarn:
+    ```sh
+    yarn install
+    ```
+
+3.  **Install iOS dependencies:**
+
+    ```sh
+    cd ios
+    bundle install
+    bundle exec pod install
+    ```
+
+## Running the Application
+
+### For Android
 
 ```sh
 # Using npm
@@ -32,23 +76,7 @@ npm run android
 yarn android
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### For iOS
 
 ```sh
 # Using npm
@@ -58,40 +86,34 @@ npm run ios
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Project Structure
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+The project follows a standard React Native structure, with some additional directories for better organization:
 
-## Step 3: Modify your app
+```
+SalfordApp/
+├── android/            # Android native project
+├── ios/                # iOS native project
+├── app/                # App screens organized by routes
+│   ├── (auth)/         # Authentication screens
+│   ├── (intro)/        # Onboarding and splash screens
+│   └── (main)/         # Main app screens
+├── assets/             # Images, fonts, and styles
+├── components/         # Reusable components
+├── constants/          # App-wide constants like colors and routes
+├── hooks/              # Custom React hooks
+├── redux/              # Redux store, slices, and actions
+├── services/           # API services and utility functions
+├── App.tsx             # Main app component
+└── package.json        # Project dependencies and scripts
+```
 
-Now that you have successfully run the app, let's make changes!
+## Available Scripts
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+In the project directory, you can run the following commands:
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+-   `npm start`: Starts the Metro bundler.
+-   `npm run android`: Builds and runs the app on an Android emulator or connected device.
+-   `npm run ios`: Builds and runs the app on an iOS simulator or connected device.
+-   `npm run lint`: Lints the code using ESLint.
+-   `npm test`: Runs the test suite using Jest.
