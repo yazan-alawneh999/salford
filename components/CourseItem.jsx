@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { memo } from 'react';
 import { homeStyles } from '../assets/styles/home.style';
 import { useRoute } from '@react-navigation/native';
 import { ROUTES } from '../constants/routes';
@@ -46,4 +46,4 @@ const CourseItem = ({ course, onClick }) => {
   );
 };
 
-export default CourseItem;
+export default memo(CourseItem);

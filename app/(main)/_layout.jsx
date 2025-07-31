@@ -4,8 +4,7 @@ import { ROUTES } from '../../constants/routes';
 import HomeScreen from './home';
 import SearchScreen from './all-courses';
 import CourseDetailsScreen from './coures-details';
-import FloatingMenu from '../../components/FloatingMenu';
-import { View } from 'react-native';
+
 import ProfileScreen from './profile';
 import CurrentCoursesScreen from './my-courses';
 import SubjectDetailsScreen from './subject-details';

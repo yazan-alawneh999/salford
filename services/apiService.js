@@ -1,146 +1,193 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from './api';
 import { tokenService } from './tokenService';
+
 // AUTH
-export const signUp = async (email, password) => {
-  try {
-    const res = await api.post('/api/auth/signup', { email, password });
-
-    // Save token
-    if (res.data?.token) {
-      await tokenService.setToken(res.data.token);
-    }
-    if (res.data?.userId) {
-      await tokenService.setUserId(res.data.userId);
-    }
-
-    return res.data;
-  } catch (error) {
-    console.error('Sign Up Error:', error.response?.data || error.message);
-    throw error;
-  }
+export const useSignUpMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    ({ email, password }) => api.post('/api/auth/signup', { email, password }),
+    {
+      onSuccess: async data => {
+        if (data.data?.token) {
+          await tokenService.setToken(data.data.token);
+        }
+        if (data.data?.userId) {
+          await tokenService.setUserId(data.data.userId);
+        }
+        queryClient.invalidateQueries(['profile', data.data.userId]);
+      },
+    },
+  );
 };
 
-export const signIn = async (email, password) => {
-  try {
-    const res = await api.post('/api/auth/signin', { email, password });
-
-    console.log('SIGNIN RESPONSE:', res.data);
-
-    if (res.data?.token) {
-      await tokenService.setToken(res.data.token);
-    }
-
-    if (res.data?.userId) {
-      await tokenService.setUserId(res.data.userId);
-      console.log(`id = ${res.data.userId}`);
-    }
-
-    return res.data;
-  } catch (error) {
-    console.error('Sign In Error:', error.response?.data || error.message);
-    throw error;
-  }
+export const useSignInMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    ({ email, password }) => api.post('/api/auth/signin', { email, password }),
+    {
+      onSuccess: async data => {
+        if (data.data?.token) {
+          await tokenService.setToken(data.data.token);
+        }
+        if (data.data?.userId) {
+          await tokenService.setUserId(data.data.userId);
+        }
+        queryClient.invalidateQueries(['profile', data.data.userId]);
+      },
+    },
+  );
 };
 
-export const signOut = async () => {
-  await tokenService.clearToken();
+export const useSignOutMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    async () => {
+      await tokenService.clearToken();
+    },
+    {
+      onSuccess: () => {
+        queryClient.clear();
+      },
+    },
+  );
 };
+
 // Courses
-export const getCourses = async () => {
-  const res = await api.get('/courses');
-  return res.data;
-};
+export const useCoursesQuery = () =>
+  useQuery(['courses'], async () => {
+    const res = await api.get('/courses');
+    return res.data;
+  });
 
-export const getCourseById = async id => {
-  const res = await api.get(`/courses/${id}`);
-  return res.data;
-};
+export const useCourseByIdQuery = id =>
+  useQuery(
+    ['course', id],
+    async () => {
+      const res = await api.get(`/courses/${id}`);
+      return res.data;
+    },
+    { enabled: !!id },
+  );
 
-export const getCourseDetails = async id => {
-  const res = await api.get(`/courses/details/${id}`);
-  console.log(res.data);
-  return res.data;
-};
+export const useCourseDetailsQuery = id =>
+  useQuery(
+    ['courseDetails', id],
+    async () => {
+      const res = await api.get(`/courses/details/${id}`);
+      return res.data;
+    },
+    { enabled: !!id },
+  );
 
-export const getCourseByName = async name => {
-  const res = await api.get(`/courses/search?name=${encodeURIComponent(name)}`);
-  return res.data;
-};
+export const useCourseByNameQuery = name =>
+  useQuery(
+    ['courses', { name }],
+    async () => {
+      const res = await api.get(
+        `/courses/search?name=${encodeURIComponent(name)}`,
+      );
+      return res.data;
+    },
+    { enabled: !!name },
+  );
 
-export const getTrendingCourses = async () => {
-  const res = await api.get('/courses/trending');
-  return res.data;
-};
+export const useTrendingCoursesQuery = () =>
+  useQuery(['trendingCourses'], async () => {
+    const res = await api.get('/courses/trending');
+    return res.data;
+  });
 
-export const getPopularCourses = async () => {
-  const res = await api.get('/courses/popular');
-  return res.data;
-};
+export const usePopularCoursesQuery = () =>
+  useQuery(['popularCourses'], async () => {
+    const res = await api.get('/courses/popular');
+    return res.data;
+  });
 
-export const getCoursesWithProgressByUser = async userId => {
-  const res = await api.get(`/courses/progress/${userId}`);
-  return res.data;
-};
+export const useCoursesWithProgressByUserQuery = userId =>
+  useQuery(
+    ['coursesWithProgress', userId],
+    async () => {
+      const res = await api.get(`/courses/progress/${userId}`);
+      return res.data;
+    },
+    { enabled: !!userId },
+  );
 
 // Plans
-export const getPlans = async () => {
-  const res = await api.get('/plans');
-  return res.data;
+export const usePlansQuery = () =>
+  useQuery(['plans'], async () => {
+    const res = await api.get('/plans');
+    return res.data;
+  });
+
+export const useSubscribePlanMutation = () => {
+  return useMutation(({ planId, userId }) =>
+    api.post('/subscriptions/create', { planId, userId }),
+  );
 };
 
-export const subscribePlan = async (planId, userId) => {
-  const res = await api.post('/subscriptions/create', { planId, userId });
-  return res.data;
-};
-export const getSubscriptions = async () => {
-  const res = await api.get('/subscriptions');
-  return res.data;
-};
+export const useSubscriptionsQuery = () =>
+  useQuery(['subscriptions'], async () => {
+    const res = await api.get('/subscriptions');
+    return res.data;
+  });
 
 // Categories
-export const getCategories = async () => {
-  const res = await api.get('/categories');
-  return res.data;
-};
-
-export const getCoursesByCategoryId = async categoryId => {
-  const res = await api.get(`courses/category/${categoryId}`);
-  return res.data;
-};
-export const getSubjectDetails = async subjectId => {
-  const res = await api.get(`courses/subject/${subjectId}`);
-  return res.data;
-};
-
-export const getProfile = async () => {
-  try {
-    const userId = await tokenService.getUserId();
-    if (!userId) {
-      throw new Error('User not authenticated');
-    }
-    const res = await api.get(`/api/profiles/${userId}`);
-    console.log('Profile data:', res.data);
+export const useCategoriesQuery = () =>
+  useQuery(['categories'], async () => {
+    const res = await api.get('/categories');
     return res.data;
-  } catch (error) {
-    console.error('Get Profile Error:', error.response?.data || error.message);
-    throw error;
-  }
-};
+  });
 
-export const getCurrentCourses = async () => {
-  try {
-    const userId = await tokenService.getUserId();
-    if (!userId) {
-      throw new Error('User not authenticated');
-    }
-    const res = await api.get(`/courses/progress/${userId}`);
-    console.log('Currenct courses data:', res.data);
-    return res.data;
-  } catch (error) {
-    console.error(
-      'Get Current Courses Error:',
-      error.response?.data || error.message,
-    );
-    throw error;
-  }
-};
+export const useCoursesByCategoryIdQuery = categoryId =>
+  useQuery(
+    ['coursesByCategory', categoryId],
+    async () => {
+      const res = await api.get(`courses/category/${categoryId}`);
+      return res.data;
+    },
+    { enabled: !!categoryId },
+  );
+
+export const useSubjectDetailsQuery = subjectId =>
+  useQuery(
+    ['subjectDetails', subjectId],
+    async () => {
+      const res = await api.get(`courses/subject/${subjectId}`);
+      return res.data;
+    },
+    { enabled: !!subjectId },
+  );
+
+export const useProfileQuery = () =>
+  useQuery(
+    ['profile'],
+    async () => {
+      const userId = await tokenService.getUserId();
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+      const res = await api.get(`/api/profiles/${userId}`);
+      return res.data;
+    },
+    {
+      enabled: !!tokenService.getUserId(),
+    },
+  );
+
+export const useCurrentCoursesQuery = () =>
+  useQuery(
+    ['currentCourses'],
+    async () => {
+      const userId = await tokenService.getUserId();
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+      const res = await api.get(`/courses/progress/${userId}`);
+      return res.data;
+    },
+    {
+      enabled: !!tokenService.getUserId(),
+    },
+  );

@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { homeStyles } from '../../assets/styles/home.style';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Graduation from '../../assets/images/graduate-bat.svg';
@@ -17,98 +17,76 @@ import Fire from '../../assets/images/fire.svg';
 import { COLORS } from '../../constants/color';
 import CategoryFilter from '../../components/CategoryFilter';
 import {
-  getCategories,
-  getTrendingCourses,
-  getPopularCourses,
-  getCoursesByCategoryId,
+  useCategoriesQuery,
+  useTrendingCoursesQuery,
+  usePopularCoursesQuery,
+  useProfileQuery,
+  useCoursesByCategoryIdQuery,
 } from '../../services/apiService';
 import CourseItem from '../../components/CourseItem';
 import { IMAGE_BASE_URL } from '../../services/api';
-import { useSelector, useDispatch } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
-import { fetchProfile } from '../../redux/slices/profileSlice ';
 import FloatingMenu from '../../components/FloatingMenu';
+import CourseEmptyState from '../../components/CourseEmptyState';
 
 const HomeScreen = ({ navigation }) => {
-  const [refreshing, setRefreshing] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [trendingCourses, setTrendingCourses] = useState([]);
-  const [popularCourses, setPopularCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [courseLoading, setCourseLoading] = useState(false);
-  const { profile } = useSelector(state => state.profile);
-  const dispatch = useDispatch();
 
-  console.log(profile);
+  const { data: categories, isLoading: categoriesLoading } =
+    useCategoriesQuery();
+  const {
+    data: trendingCourses,
+    isLoading: trendingLoading,
+    refetch: refetchTrending,
+  } = useTrendingCoursesQuery();
+  const {
+    data: popularCourses,
+    isLoading: popularLoading,
+    refetch: refetchPopular,
+  } = usePopularCoursesQuery();
+  const { data: profile } = useProfileQuery();
+  const {
+    data: categoryCourses,
+    isLoading: categoryCoursesLoading,
+    refetch: refetchCategoryCourses,
+  } = useCoursesByCategoryIdQuery(selectedCategory?.id);
 
-  const fetchData = async () => {
-    try {
-      const [catRes, trendingRes, popularRes] = await Promise.all([
-        getCategories(),
-        getTrendingCourses(),
-        getPopularCourses(),
-        dispatch(fetchProfile()),
-      ]);
-      if (!selectedCategory) {
-        setSelectedCategory(catRes[0].name);
-      }
-
-      setCategories(catRes);
-      setTrendingCourses(trendingRes);
-      setPopularCourses(popularRes);
-    } catch (err) {
-      console.error('Failed to load home data:', err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchData();
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const loadCategoryCourses = async category => {
-    try {
-      const courses = await getCoursesByCategoryId(category.id);
-
-      const trendingCourses = courses.filter(
-        course => course.popularity_type === 'trending',
-      );
-
-      const popularCourses = courses.filter(
-        course => course.popularity_type === 'popular',
-      );
-
-      setTrendingCourses(trendingCourses);
-      setPopularCourses(popularCourses);
-    } catch (error) {
-      console.error('Error loading category courses:', error);
-      setTrendingCourses([]);
-      setPopularCourses([]);
-    }
-  };
-  const handleGoSearch = () => {
+  const handleGoSearch = useCallback(() => {
     navigation.navigate(ROUTES.SEARCH);
-  };
+  }, [navigation]);
 
-  const handleCategorySelect = async category => {
-    setSelectedCategory(category.name);
-    setCourseLoading(true);
-    await loadCategoryCourses(category);
-    setCourseLoading(false);
-  };
+  const handleCategorySelect = useCallback(
+    async category => {
+      setSelectedCategory(category);
+      refetchCategoryCourses();
+    },
+    [refetchCategoryCourses],
+  );
 
-  const handleCoursePressed = course => {
-    navigation.navigate(ROUTES.DETAILS, { courseId: course.id });
-  };
-  if (loading) {
+  const handleCoursePressed = useCallback(
+    course => {
+      navigation.navigate(ROUTES.DETAILS, { courseId: course.id });
+    },
+    [navigation],
+  );
+
+  const onRefresh = useCallback(async () => {
+    refetchTrending();
+    refetchPopular();
+  }, [refetchTrending, refetchPopular]);
+
+  const renderCourseItem = useCallback(
+    ({ item }) => <CourseItem course={item} onClick={handleCoursePressed} />,
+    [handleCoursePressed],
+  );
+
+  const getItemLayout = (data, index) => ({
+    length: 200,
+    offset: 200 * index,
+    index,
+  });
+
+  if (categoriesLoading || trendingLoading || popularLoading) {
     return (
       <View style={homeStyles.centered}>
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -123,7 +101,7 @@ const HomeScreen = ({ navigation }) => {
         refreshControl={
           <RefreshControl
             colors={[COLORS.primary]}
-            refreshing={refreshing}
+            refreshing={trendingLoading || popularLoading}
             onRefresh={onRefresh}
           />
         }
@@ -191,10 +169,10 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
         {/* categories section */}
         <View style={homeStyles.section}>
-          {categories.length > 0 && (
+          {categories && categories.length > 0 && (
             <CategoryFilter
               categories={categories}
-              selectedCategory={selectedCategory}
+              selectedCategory={selectedCategory?.name}
               onSelectCategory={handleCategorySelect}
             />
           )}
@@ -208,14 +186,12 @@ const HomeScreen = ({ navigation }) => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {courseLoading ? (
+          {trendingLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : trendingCourses.length > 0 ? (
+          ) : trendingCourses && trendingCourses.length > 0 ? (
             <FlatList
               data={trendingCourses}
-              renderItem={({ item }) => (
-                <CourseItem course={item} onClick={handleCoursePressed} />
-              )}
+              renderItem={renderCourseItem}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[
@@ -223,24 +199,11 @@ const HomeScreen = ({ navigation }) => {
                 trendingCourses.length === 0 && homeStyles.center,
               ]}
               showsHorizontalScrollIndicator={false}
-              ListEmptyComponent={
-                <View style={homeStyles.emptyState}>
-                  <Icon name="book-outline" size={64} color={COLORS.primary} />
-                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-                  <Text style={homeStyles.emptyDescription}>
-                    Try a different category
-                  </Text>
-                </View>
-              }
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={<CourseEmptyState />}
             />
           ) : (
-            <View style={homeStyles.emptyState}>
-              <Icon name="book-outline" size={64} color={COLORS.primary} />
-              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-              <Text style={homeStyles.emptyDescription}>
-                Try a different category
-              </Text>
-            </View>
+            <CourseEmptyState />
           )}
         </View>
         {/*Popular  courses section */}
@@ -252,14 +215,12 @@ const HomeScreen = ({ navigation }) => {
             <Text style={homeStyles.seeAllText}>See All</Text>
           </View>
 
-          {courseLoading ? (
+          {popularLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : popularCourses.length > 0 ? (
+          ) : popularCourses && popularCourses.length > 0 ? (
             <FlatList
               data={popularCourses}
-              renderItem={({ item }) => (
-                <CourseItem course={item} onClick={handleCoursePressed} />
-              )}
+              renderItem={renderCourseItem}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[
@@ -267,31 +228,17 @@ const HomeScreen = ({ navigation }) => {
                 popularCourses.length === 0 && homeStyles.center,
               ]}
               showsHorizontalScrollIndicator={false}
-              ListEmptyComponent={
-                <View style={homeStyles.emptyState}>
-                  <Icon name="book-outline" size={64} color={COLORS.primary} />
-                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-                  <Text style={homeStyles.emptyDescription}>
-                    Try a different category
-                  </Text>
-                </View>
-              }
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={<CourseEmptyState />}
             />
           ) : (
-            <View style={homeStyles.emptyState}>
-              <Icon name="book-outline" size={64} color={COLORS.primary} />
-              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-              <Text style={homeStyles.emptyDescription}>
-                Try a different category
-              </Text>
-            </View>
+            <CourseEmptyState />
           )}
         </View>
       </ScrollView>
-            <FloatingMenu navigation={navigation} />
-      
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };
 
-export default HomeScreen;
+export default memo(HomeScreen);
