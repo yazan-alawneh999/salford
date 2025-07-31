@@ -4,12 +4,20 @@ import store from './redux/store';
 import { checkAuth } from './redux/slices/authSlice';
 import Entry from './Entry';
 import { fetchProfile } from './redux/slices/profileSlice ';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 const AppWrapper = () => (
   <Provider store={store}>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </Provider>
 );
+
 function App() {
   const dispatch = useDispatch();
   const { loading, isAuthenticated } = useSelector(state => state.auth);
@@ -22,11 +30,7 @@ function App() {
     initialize();
   }, [dispatch]);
 
-  return (
-    <Provider store={store}>
-      <Entry isAuthenticated={isAuthenticated} loading={loading} />
-    </Provider>
-  );
+  return <Entry isAuthenticated={isAuthenticated} loading={loading} />;
 }
 
 export default AppWrapper;
