@@ -35,56 +35,6 @@ Before you begin, ensure you have the following installed:
 
 For a detailed guide on setting up your environment, please refer to the [official React Native documentation](https://reactnative.dev/docs/set-up-your-environment).
 
-## Installation
-
-1.  **Clone the repository:**
-
-    ```sh
-    git clone https://github.com/your-username/SalfordApp.git
-    cd SalfordApp
-    ```
-
-2.  **Install dependencies:**
-
-    Using npm:
-    ```sh
-    npm install
-    ```
-
-    Using Yarn:
-    ```sh
-    yarn install
-    ```
-
-3.  **Install iOS dependencies:**
-
-    ```sh
-    cd ios
-    bundle install
-    bundle exec pod install
-    ```
-
-## Running the Application
-
-### For Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
 
 ## Project Structure
 
@@ -108,12 +58,9 @@ SalfordApp/
 └── package.json        # Project dependencies and scripts
 ```
 
-## Available Scripts
 
-In the project directory, you can run the following commands:
 
--   `npm start`: Starts the Metro bundler.
--   `npm run android`: Builds and runs the app on an Android emulator or connected device.
--   `npm run ios`: Builds and runs the app on an iOS simulator or connected device.
--   `npm run lint`: Lints the code using ESLint.
--   `npm test`: Runs the test suite using Jest.
+https://github.com/user-attachments/assets/50af79f5-bae9-4654-b592-b7b585f2b9f3
+
+
+
