@@ -82,9 +82,9 @@ const SubjectDetailsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
         showsVerticalScrollIndicator={false}
       >
         {/* Video Section */}

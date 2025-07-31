@@ -66,7 +66,7 @@ export const authStyles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    color: COLORS.text,
+    color: COLORS.hintDark,
 
     flex: 1,
     paddingEnd: 4,
