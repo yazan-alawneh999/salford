@@ -1,97 +1,60 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
+Sure! Here's a clean and professional **Markdown-formatted summary** of your optimizations and refactoring, written for documentation or GitHub PRs:
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+# 🛠️ React Native Optimization 
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+This document summarizes key improvements made to enhance the **performance**, **maintainability**, and **code quality** of the React Native application.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
 
-# OR using Yarn
-yarn start
-```
 
-## Step 2: Build and run your app
+### 📌 Summary: React Native App Optimization and Refactoring
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+We significantly enhanced the **performance** and **maintainability** of the React Native app through:
 
-### Android
 
-```sh
-# Using npm
-npm run android
+### ✅ **Key Improvements**
 
-# OR using Yarn
-yarn android
-```
+#### 1. **Performance Optimization**
 
-### iOS
+* **Reduced bundle size** by removing `console.log` from production builds.
+* **Optimized rendering** with `React.memo`, `useCallback`, and `getItemLayout` for smoother UI and faster scrolling.
+* **More efficient data fetching** by replacing a manual in-memory cache with React Query.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+#### 2. **Modernized Data Fetching with React Query**
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+* **Cleaner, simpler components** by removing manual state and fetch logic.
+* **Built-in caching & revalidation**, keeping data fresh automatically.
+* **Better UX** with features like background refetching and stale-while-revalidate.
+* **Simplified mutations** using `useMutation` for actions like sign-up and plan subscription.
 
-```sh
-bundle install
-```
 
-Then, and every time you update your native dependencies, run:
 
-```sh
-bundle exec pod install
-```
+### 3. **Callback Memoization**
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+* **What:** Avoided re-creating functions on every render.
+* **How:** Used `useCallback` for handlers like `handleCategorySelect`, `handleCoursePressed`, etc., especially when passed as props.
 
-```sh
-# Using npm
-npm run ios
+### 4. **FlatList Performance**
 
-# OR using Yarn
-yarn ios
-```
+* **What:** Improved scroll performance for `FlatList` components.
+* **How:** Added `getItemLayout` to `FlatList` in `home.jsx` for faster item measurement and rendering.
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### 5. **API Response Caching**
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+* **What:** Reduced redundant API calls.
+* **How:** Implemented a basic in-memory cache in `apiService.js` for GET requests, cleared on user logout.
 
-## Step 3: Modify your app
 
-Now that you have successfully run the app, let's make changes!
+---
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### 🧠 Final Outcome
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+The app is now faster, more scalable, and easier to maintain. These improvements lay a strong foundation for future features and long-term growth.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## Congratulations! :tada:
 
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
