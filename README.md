@@ -16,7 +16,6 @@ This document summarizes key improvements made to enhance the **performance**, *
 
 We significantly enhanced the **performance** and **maintainability** of the React Native app through:
 
----
 
 ### ✅ **Key Improvements**
 
@@ -33,7 +32,6 @@ We significantly enhanced the **performance** and **maintainability** of the Rea
 * **Better UX** with features like background refetching and stale-while-revalidate.
 * **Simplified mutations** using `useMutation` for actions like sign-up and plan subscription.
 
----
 
 
 ### 3. **Callback Memoization**
