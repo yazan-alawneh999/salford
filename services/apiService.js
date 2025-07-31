@@ -5,165 +5,184 @@ import { tokenService } from './tokenService';
 // AUTH
 export const useSignUpMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation(
-    ({ email, password }) => api.post('/api/auth/signup', { email, password }),
-    {
-      onSuccess: async data => {
-        if (data.data?.token) {
-          await tokenService.setToken(data.data.token);
-        }
-        if (data.data?.userId) {
-          await tokenService.setUserId(data.data.userId);
-        }
-        queryClient.invalidateQueries(['profile', data.data.userId]);
-      },
+  return useMutation({
+    mutationFn: ({ email, password }) =>
+      api.post('/api/auth/signup', { email, password }),
+    onSuccess: async data => {
+      if (data.data?.token) {
+        await tokenService.setToken(data.data.token);
+      }
+      if (data.data?.userId) {
+        await tokenService.setUserId(data.data.userId);
+      }
+      queryClient.invalidateQueries({
+        queryKey: ['profile', data.data.userId],
+      });
     },
-  );
+  });
 };
 
 export const useSignInMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation(
-    ({ email, password }) => api.post('/api/auth/signin', { email, password }),
-    {
-      onSuccess: async data => {
-        if (data.data?.token) {
-          await tokenService.setToken(data.data.token);
-        }
-        if (data.data?.userId) {
-          await tokenService.setUserId(data.data.userId);
-        }
-        queryClient.invalidateQueries(['profile', data.data.userId]);
-      },
+  return useMutation({
+    mutationFn: ({ email, password }) =>
+      api.post('/api/auth/signin', { email, password }),
+    onSuccess: async data => {
+      if (data.data?.token) {
+        await tokenService.setToken(data.data.token);
+      }
+      if (data.data?.userId) {
+        await tokenService.setUserId(data.data.userId);
+      }
+      queryClient.invalidateQueries({
+        queryKey: ['profile', data.data.userId],
+      });
     },
-  );
+  });
 };
 
 export const useSignOutMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async () => {
+  return useMutation({
+    mutationFn: async () => {
       await tokenService.clearToken();
     },
-    {
-      onSuccess: () => {
-        queryClient.clear();
-      },
+    onSuccess: () => {
+      queryClient.clear();
     },
-  );
+  });
 };
 
 // Courses
 export const useCoursesQuery = () =>
-  useQuery(['courses'], async () => {
-    const res = await api.get('/courses');
-    return res.data;
+  useQuery({
+    queryKey: ['courses'],
+    queryFn: async () => {
+      const res = await api.get('/courses');
+      return res.data;
+    },
   });
 
 export const useCourseByIdQuery = id =>
-  useQuery(
-    ['course', id],
-    async () => {
+  useQuery({
+    queryKey: ['course', id],
+    queryFn: async () => {
       const res = await api.get(`/courses/${id}`);
       return res.data;
     },
-    { enabled: !!id },
-  );
+    enabled: !!id,
+  });
 
 export const useCourseDetailsQuery = id =>
-  useQuery(
-    ['courseDetails', id],
-    async () => {
+  useQuery({
+    queryKey: ['courseDetails', id],
+    queryFn: async () => {
       const res = await api.get(`/courses/details/${id}`);
       return res.data;
     },
-    { enabled: !!id },
-  );
+    enabled: !!id,
+  });
 
 export const useCourseByNameQuery = name =>
-  useQuery(
-    ['courses', { name }],
-    async () => {
+  useQuery({
+    queryKey: ['courses', { name }],
+    queryFn: async () => {
       const res = await api.get(
         `/courses/search?name=${encodeURIComponent(name)}`,
       );
       return res.data;
     },
-    { enabled: !!name },
-  );
+    enabled: !!name,
+  });
 
 export const useTrendingCoursesQuery = () =>
-  useQuery(['trendingCourses'], async () => {
-    const res = await api.get('/courses/trending');
-    return res.data;
+  useQuery({
+    queryKey: ['trendingCourses'],
+    queryFn: async () => {
+      const res = await api.get('/courses/trending');
+      return res.data;
+    },
   });
 
 export const usePopularCoursesQuery = () =>
-  useQuery(['popularCourses'], async () => {
-    const res = await api.get('/courses/popular');
-    return res.data;
+  useQuery({
+    queryKey: ['popularCourses'],
+    queryFn: async () => {
+      const res = await api.get('/courses/popular');
+      return res.data;
+    },
   });
 
 export const useCoursesWithProgressByUserQuery = userId =>
-  useQuery(
-    ['coursesWithProgress', userId],
-    async () => {
+  useQuery({
+    queryKey: ['coursesWithProgress', userId],
+    queryFn: async () => {
       const res = await api.get(`/courses/progress/${userId}`);
       return res.data;
     },
-    { enabled: !!userId },
-  );
+    enabled: !!userId,
+  });
 
 // Plans
 export const usePlansQuery = () =>
-  useQuery(['plans'], async () => {
-    const res = await api.get('/plans');
-    return res.data;
+  useQuery({
+    queryKey: ['plans'],
+    queryFn: async () => {
+      const res = await api.get('/plans');
+      return res.data;
+    },
   });
 
 export const useSubscribePlanMutation = () => {
-  return useMutation(({ planId, userId }) =>
-    api.post('/subscriptions/create', { planId, userId }),
-  );
+  return useMutation({
+    mutationFn: ({ planId, userId }) =>
+      api.post('/subscriptions/create', { planId, userId }),
+  });
 };
 
 export const useSubscriptionsQuery = () =>
-  useQuery(['subscriptions'], async () => {
-    const res = await api.get('/subscriptions');
-    return res.data;
+  useQuery({
+    queryKey: ['subscriptions'],
+    queryFn: async () => {
+      const res = await api.get('/subscriptions');
+      return res.data;
+    },
   });
 
 // Categories
 export const useCategoriesQuery = () =>
-  useQuery(['categories'], async () => {
-    const res = await api.get('/categories');
-    return res.data;
+  useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const res = await api.get('/categories');
+      return res.data;
+    },
   });
 
 export const useCoursesByCategoryIdQuery = categoryId =>
-  useQuery(
-    ['coursesByCategory', categoryId],
-    async () => {
+  useQuery({
+    queryKey: ['coursesByCategory', categoryId],
+    queryFn: async () => {
       const res = await api.get(`courses/category/${categoryId}`);
       return res.data;
     },
-    { enabled: !!categoryId },
-  );
+    enabled: !!categoryId,
+  });
 
 export const useSubjectDetailsQuery = subjectId =>
-  useQuery(
-    ['subjectDetails', subjectId],
-    async () => {
+  useQuery({
+    queryKey: ['subjectDetails', subjectId],
+    queryFn: async () => {
       const res = await api.get(`courses/subject/${subjectId}`);
       return res.data;
     },
-    { enabled: !!subjectId },
-  );
+    enabled: !!subjectId,
+  });
 
 export const useProfileQuery = () =>
-  useQuery(
-    ['profile'],
-    async () => {
+  useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
       const userId = await tokenService.getUserId();
       if (!userId) {
         throw new Error('User not authenticated');
@@ -171,15 +190,13 @@ export const useProfileQuery = () =>
       const res = await api.get(`/api/profiles/${userId}`);
       return res.data;
     },
-    {
-      enabled: !!tokenService.getUserId(),
-    },
-  );
+    enabled: !!tokenService.getUserId(),
+  });
 
 export const useCurrentCoursesQuery = () =>
-  useQuery(
-    ['currentCourses'],
-    async () => {
+  useQuery({
+    queryKey: ['currentCourses'],
+    queryFn: async () => {
       const userId = await tokenService.getUserId();
       if (!userId) {
         throw new Error('User not authenticated');
@@ -187,7 +204,5 @@ export const useCurrentCoursesQuery = () =>
       const res = await api.get(`/courses/progress/${userId}`);
       return res.data;
     },
-    {
-      enabled: !!tokenService.getUserId(),
-    },
-  );
+    enabled: !!tokenService.getUserId(),
+  });
