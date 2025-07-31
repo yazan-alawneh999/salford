@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, memo } from 'react';
 import { homeStyles } from '../../assets/styles/home.style';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Graduation from '../../assets/images/graduate-bat.svg';
@@ -28,6 +28,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import { fetchProfile } from '../../redux/slices/profileSlice ';
 import FloatingMenu from '../../components/FloatingMenu';
+import CourseEmptyState from '../../components/CourseEmptyState';
 
 const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -40,15 +41,13 @@ const HomeScreen = ({ navigation }) => {
   const { profile } = useSelector(state => state.profile);
   const dispatch = useDispatch();
 
-  console.log(profile);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
+      dispatch(fetchProfile());
       const [catRes, trendingRes, popularRes] = await Promise.all([
         getCategories(),
         getTrendingCourses(),
         getPopularCourses(),
-        dispatch(fetchProfile()),
       ]);
       if (!selectedCategory) {
         setSelectedCategory(catRes[0].name);
@@ -62,19 +61,19 @@ const HomeScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch, selectedCategory]);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchData();
     setRefreshing(false);
-  };
+  }, [fetchData]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
-  const loadCategoryCourses = async category => {
+  const loadCategoryCourses = useCallback(async category => {
     try {
       const courses = await getCoursesByCategoryId(category.id);
 
@@ -93,21 +92,39 @@ const HomeScreen = ({ navigation }) => {
       setTrendingCourses([]);
       setPopularCourses([]);
     }
-  };
-  const handleGoSearch = () => {
+  }, []);
+  const handleGoSearch = useCallback(() => {
     navigation.navigate(ROUTES.SEARCH);
-  };
+  }, [navigation]);
 
-  const handleCategorySelect = async category => {
-    setSelectedCategory(category.name);
-    setCourseLoading(true);
-    await loadCategoryCourses(category);
-    setCourseLoading(false);
-  };
+  const handleCategorySelect = useCallback(
+    async category => {
+      setSelectedCategory(category.name);
+      setCourseLoading(true);
+      await loadCategoryCourses(category);
+      setCourseLoading(false);
+    },
+    [loadCategoryCourses],
+  );
 
-  const handleCoursePressed = course => {
-    navigation.navigate(ROUTES.DETAILS, { courseId: course.id });
-  };
+  const handleCoursePressed = useCallback(
+    course => {
+      navigation.navigate(ROUTES.DETAILS, { courseId: course.id });
+    },
+    [navigation],
+  );
+
+  const renderCourseItem = useCallback(
+    ({ item }) => <CourseItem course={item} onClick={handleCoursePressed} />,
+    [handleCoursePressed],
+  );
+
+  const getItemLayout = (data, index) => ({
+    length: 200,
+    offset: 200 * index,
+    index,
+  });
+
   if (loading) {
     return (
       <View style={homeStyles.centered}>
@@ -213,9 +230,7 @@ const HomeScreen = ({ navigation }) => {
           ) : trendingCourses.length > 0 ? (
             <FlatList
               data={trendingCourses}
-              renderItem={({ item }) => (
-                <CourseItem course={item} onClick={handleCoursePressed} />
-              )}
+              renderItem={renderCourseItem}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[
@@ -223,24 +238,11 @@ const HomeScreen = ({ navigation }) => {
                 trendingCourses.length === 0 && homeStyles.center,
               ]}
               showsHorizontalScrollIndicator={false}
-              ListEmptyComponent={
-                <View style={homeStyles.emptyState}>
-                  <Icon name="book-outline" size={64} color={COLORS.primary} />
-                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-                  <Text style={homeStyles.emptyDescription}>
-                    Try a different category
-                  </Text>
-                </View>
-              }
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={<CourseEmptyState />}
             />
           ) : (
-            <View style={homeStyles.emptyState}>
-              <Icon name="book-outline" size={64} color={COLORS.primary} />
-              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-              <Text style={homeStyles.emptyDescription}>
-                Try a different category
-              </Text>
-            </View>
+            <CourseEmptyState />
           )}
         </View>
         {/*Popular  courses section */}
@@ -257,9 +259,7 @@ const HomeScreen = ({ navigation }) => {
           ) : popularCourses.length > 0 ? (
             <FlatList
               data={popularCourses}
-              renderItem={({ item }) => (
-                <CourseItem course={item} onClick={handleCoursePressed} />
-              )}
+              renderItem={renderCourseItem}
               keyExtractor={item => item.id.toString()}
               horizontal
               contentContainerStyle={[
@@ -267,31 +267,17 @@ const HomeScreen = ({ navigation }) => {
                 popularCourses.length === 0 && homeStyles.center,
               ]}
               showsHorizontalScrollIndicator={false}
-              ListEmptyComponent={
-                <View style={homeStyles.emptyState}>
-                  <Icon name="book-outline" size={64} color={COLORS.primary} />
-                  <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-                  <Text style={homeStyles.emptyDescription}>
-                    Try a different category
-                  </Text>
-                </View>
-              }
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={<CourseEmptyState />}
             />
           ) : (
-            <View style={homeStyles.emptyState}>
-              <Icon name="book-outline" size={64} color={COLORS.primary} />
-              <Text style={homeStyles.emptyTitle}>No Courses found</Text>
-              <Text style={homeStyles.emptyDescription}>
-                Try a different category
-              </Text>
-            </View>
+            <CourseEmptyState />
           )}
         </View>
       </ScrollView>
-            <FloatingMenu navigation={navigation} />
-      
+      <FloatingMenu navigation={navigation} />
     </View>
   );
 };
 
-export default HomeScreen;
+export default memo(HomeScreen);
