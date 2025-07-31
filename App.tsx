@@ -5,7 +5,6 @@ import { checkAuth } from './redux/slices/authSlice';
 import Entry from './Entry';
 import { fetchProfile } from './redux/slices/profileSlice ';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient();
 
@@ -13,7 +12,6 @@ const AppWrapper = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <App />
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </Provider>
 );
