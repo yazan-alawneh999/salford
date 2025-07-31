@@ -8,7 +8,11 @@ import {
 import { searchStyles } from '../../assets/styles/search.styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../constants/color';
-import { getCourseByName, getCourses } from '../../services/apiService';
+import {
+  getCourseByName,
+  useCoursesQuery,
+  useCourseByNameQuery,
+} from '../../services/apiService';
 import AllCoursesItem from '../../components/AllCoursesItem';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -26,12 +30,12 @@ const SearchScreen = ({ navigation }) => {
   const performSearch = async query => {
     // if no search query
     if (!query.trim()) {
-      return await getCourses();
+      return await useCoursesQuery();
     }
 
     // search by name first, then by ingredient if no results
 
-    const nameResults = await getCourseByName(query);
+    const nameResults = await useCourseByNameQuery(query);
 
     return nameResults;
   };
