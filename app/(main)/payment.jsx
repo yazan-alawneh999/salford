@@ -18,7 +18,7 @@ import Check from '../../assets/images/checked.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
-import { subscribePlan } from '../../services/apiService';
+import { useSubscribePlanMutation } from '../../services/apiService';
 import { ROUTES } from '../../constants/routes';
 
 const PaymentMethod = ({ navigation, route }) => {
@@ -26,8 +26,9 @@ const PaymentMethod = ({ navigation, route }) => {
 
   const planID = route.params.planId;
   const [selected, setSelected] = useState('visa');
-  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  const subscribePlanMutation = useSubscribePlanMutation();
 
   const paymentOptions = [
     { id: 'visa', Icon: VisaIcon, width: 56, height: 25 },
@@ -36,15 +37,17 @@ const PaymentMethod = ({ navigation, route }) => {
   ];
 
   const handlePayment = async () => {
-    try {
-      setLoading(true);
-      await subscribePlan(planID, profile.user_id);
-      setVisible(true);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    subscribePlanMutation.mutate(
+      { planId: planID, userId: profile.user_id },
+      {
+        onSuccess: () => {
+          setVisible(true);
+        },
+        onError: error => {
+          console.log(error);
+        },
+      },
+    );
   };
   return (
     <View style={styles.container}>
@@ -142,17 +145,22 @@ const PaymentMethod = ({ navigation, route }) => {
         </View>
         <TouchableOpacity
           onPress={handlePayment}
-          disabled={loading}
+          disabled={subscribePlanMutation.isLoading}
           activeOpacity={0.8}
         >
           <LinearGradient
             colors={['#087E8B', '#0B3954']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={[styles.authButton, loading && styles.buttonDisabled]}
+            style={[
+              styles.authButton,
+              subscribePlanMutation.isLoading && styles.buttonDisabled,
+            ]}
           >
             <Text style={styles.buttonText}>
-              {loading ? 'Proceeding ...' : 'Proceed to Payment'}
+              {subscribePlanMutation.isLoading
+                ? 'Proceeding ...'
+                : 'Proceed to Payment'}
             </Text>
           </LinearGradient>
         </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -12,50 +12,22 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { styles } from '../../assets/styles/courseDetails.style';
 import { homeStyles } from '../../assets/styles/home.style';
 import { COLORS } from '../../constants/color';
-import { getCourseDetails } from '../../services/apiService';
-import { CourseCard, SubjectCard } from '../../components/SubjectCard';
+import { useCourseDetailsQuery } from '../../services/apiService';
+import { SubjectCard } from '../../components/SubjectCard';
 import { ROUTES } from '../../constants/routes';
 import FloatingMenu from '../../components/FloatingMenu';
 
 const CourseDetailsScreen = ({ navigation, route }) => {
-  const [courseDetails, setCourseDetails] = useState(null);
-  const [lessons, setLessons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
   const courseID = route.params.courseId;
+  const {
+    data: courseDetails,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useCourseDetailsQuery(courseID);
 
-  // Fetch data from server
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await getCourseDetails(courseID);
-
-      // Assuming response.data has featuredCourse and courses array
-      setCourseDetails(response);
-      //   setLessons(response.data.lessons.slice(3));
-      setError(null);
-    } catch (err) {
-      setError('Failed to fetch courses. Please try again.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  // Initial load
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // Pull-to-refresh
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchData();
-  };
-
-  if (loading && !refreshing) {
+  if (isLoading) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -63,11 +35,13 @@ const CourseDetailsScreen = ({ navigation, route }) => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity onPress={fetchData} style={styles.retryButton}>
+        <Text style={styles.errorText}>
+          Failed to fetch courses. Please try again.
+        </Text>
+        <TouchableOpacity onPress={refetch} style={styles.retryButton}>
           <Text style={styles.retryText}>Retry</Text>
         </TouchableOpacity>
       </View>
@@ -107,8 +81,8 @@ const CourseDetailsScreen = ({ navigation, route }) => {
         keyExtractor={item => item.id.toString()}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
+            refreshing={isFetching}
+            onRefresh={refetch}
             colors={[COLORS.primary]}
           />
         }

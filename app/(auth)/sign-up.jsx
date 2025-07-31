@@ -14,7 +14,7 @@ import { COLORS } from '../../constants/color';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { signUp } from '../../services/authService';
+import { useSignUpMutation } from '../../services/authService';
 import { showMessage } from 'react-native-flash-message';
 import { ROUTES } from '../../constants/routes';
 
@@ -24,8 +24,8 @@ const SignUpScreen = ({ navigation }) => {
   const [confirmPass, setConfirmPass] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+
+  const signUpMutation = useSignUpMutation();
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPass) {
@@ -39,17 +39,19 @@ const SignUpScreen = ({ navigation }) => {
       return showMessage({ message: 'Passwords do not match', type: 'danger' });
     }
 
-    setLoading(true);
-    try {
-      await signUp({ email, password });
-      showMessage({ message: 'Registration successful', type: 'success' });
-      navigation.replace(ROUTES.Main);
-    } catch (err) {
-      const msg = err.response?.data?.error || 'Signup failed';
-      showMessage({ message: msg, type: 'danger' });
-    } finally {
-      setLoading(false);
-    }
+    signUpMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          showMessage({ message: 'Registration successful', type: 'success' });
+          navigation.replace(ROUTES.Main);
+        },
+        onError: err => {
+          const msg = err.response?.data?.error || 'Signup failed';
+          showMessage({ message: msg, type: 'danger' });
+        },
+      },
+    );
   };
 
   return (
@@ -139,7 +141,7 @@ const SignUpScreen = ({ navigation }) => {
 
             <TouchableOpacity
               onPress={handleSignUp}
-              disabled={loading}
+              disabled={signUpMutation.isLoading}
               activeOpacity={0.8}
             >
               <LinearGradient
@@ -148,11 +150,11 @@ const SignUpScreen = ({ navigation }) => {
                 end={{ x: 1, y: 0 }}
                 style={[
                   authStyles.authButton,
-                  loading && authStyles.buttonDisabled,
+                  signUpMutation.isLoading && authStyles.buttonDisabled,
                 ]}
               >
                 <Text style={authStyles.buttonText}>
-                  {loading ? 'Signing up...' : 'Sign up'}
+                  {signUpMutation.isLoading ? 'Signing up...' : 'Sign up'}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
