@@ -159,11 +159,20 @@ export const useCategoriesQuery = () =>
     },
   });
 
-export const useCoursesByCategoryIdQuery = categoryId =>
+export const usePopularCoursesByCategoryIdQuery = categoryId =>
   useQuery({
     queryKey: ['coursesByCategory', categoryId],
     queryFn: async () => {
-      const res = await api.get(`courses/category/${categoryId}`);
+      const res = await api.get(`courses/popular/${categoryId}`);
+      return res.data;
+    },
+    enabled: !!categoryId,
+  });
+export const useTrendingCoursesByCategoryIdQuery = categoryId =>
+  useQuery({
+    queryKey: ['coursesByCategory', categoryId],
+    queryFn: async () => {
+      const res = await api.get(`courses/trending/${categoryId}`);
       return res.data;
     },
     enabled: !!categoryId,
@@ -204,5 +213,6 @@ export const useCurrentCoursesQuery = () =>
       const res = await api.get(`/courses/progress/${userId}`);
       return res.data;
     },
+
     enabled: !!tokenService.getUserId(),
   });

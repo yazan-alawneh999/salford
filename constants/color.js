@@ -2,7 +2,7 @@ const slafordTheme = {
   primary: '#087E8B',
   primaryDark: '#0B3954',
   background: '#F8F1F1',
-  text: '#84838399',
+  text: '#000000',
   border: '#087E8B',
   white: '#FFFFFF',
   textLight: '#747688',

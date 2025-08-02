@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -12,8 +12,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import LoadingSpinner from '../../components/LoadingSpinner.jsx';
 import {
-  getSubjectDetails,
-  getSubscriptions,
+  useSubjectDetailsQuery,
+  useSubscriptionsQuery,
 } from '../../services/apiService.js';
 import { styles } from '../../assets/styles/lessonsDetails.js';
 import Video from 'react-native-video';
@@ -22,47 +22,21 @@ import FloatingMenu from '../../components/FloatingMenu.jsx';
 import { IMAGE_BASE_URL } from '../../services/api.js';
 
 const SubjectDetailsScreen = ({ navigation, route }) => {
-  const [courseDetails, setCourseDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState(null);
-  const [subscriptions, setSubscriptions] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
-
   const video = useRef(null);
   const subjectId = route.params.subjectId;
-  const fetchData = async () => {
-    try {
-      setLoading(true);
 
-      const [courses, subscriptions] = await Promise.all([
-        await getSubjectDetails(route.params.subjectId),
-        await getSubscriptions(),
-      ]);
-      setCourseDetails(courses);
-      setSubscriptions(subscriptions);
-      console.log(courses);
-      // console.log(subscriptions);
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to fetch course details. Please try again.');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+  const {
+    data: courseDetails,
+    isLoading: courseLoading,
+    isFetching: courseFetching,
+    refetch: refetchCourse,
+    isError: courseError,
+  } = useSubjectDetailsQuery(subjectId);
+  const { data: subscriptions, isLoading: subsLoading } =
+    useSubscriptionsQuery();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchData();
-  };
-
-  if (loading && !refreshing) {
+  if (courseLoading || subsLoading) {
     return (
       <View style={styles.centerContainer}>
         <LoadingSpinner size="small" />
@@ -70,10 +44,10 @@ const SubjectDetailsScreen = ({ navigation, route }) => {
     );
   }
 
-  if (!courseDetails) {
+  if (!courseDetails || courseError) {
     return (
       <View style={styles.centerContainer}>
-        <Text>{error || 'Something went wrong.'}</Text>
+        <Text>Something went wrong.</Text>
       </View>
     );
   }
@@ -82,9 +56,6 @@ const SubjectDetailsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.listContent}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
         showsVerticalScrollIndicator={false}
       >
         {/* Video Section */}

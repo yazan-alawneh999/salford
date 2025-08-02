@@ -1,36 +1,24 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { styles } from '../../assets/styles/plans.style.js';
 import { COLORS } from '../../constants/color';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getPlans } from '../../services/apiService.js';
+import { usePlansQuery } from '../../services/apiService.js';
 import LinearGradient from 'react-native-linear-gradient';
-import { color } from 'chart.js/helpers';
 import { ROUTES } from '../../constants/routes.js';
+import LoadingSpinner from '../../components/LoadingSpinner.jsx';
 
 const PlansScreen = ({ navigation }) => {
-  const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchPlans = async () => {
-    try {
-      const res = await getPlans();
-      console.log(res);
-      setPlans(res);
-    } catch (error) {
-      console.log(`planse error : ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPlans();
-  }, []);
+  const { data: plans, isLoading } = usePlansQuery();
 
   const onPlanClicked = planID => {
     navigation.navigate(ROUTES.PAYMENT_METHOD, { planId: planID });
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -118,7 +106,10 @@ const PlanItem = ({ plan, onClick }) => {
             {plan.duration == 'monthly' ? 'Monthly' : plan.duration}
           </Text>
         </View>
-        {features && features.map(feature => <Feature txt={feature} />)}
+        {features &&
+          features.map((feature, index) => (
+            <Feature key={`${feature}-${index}`} txt={feature} />
+          ))}
 
         <TouchableOpacity
           style={styles.button}
